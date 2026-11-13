@@ -40,12 +40,13 @@ const ACTION_CODES = new Set(["KeyE", "Space", "Enter"]);
 
 const SHOP_LINES = {
   PASALUBONG: [
-    "Dried mangoes, otap, polvoron — the holy trinity.",
-    "Take a box for the people back home. And one for the flight.",
+    "Bili na po kayo ng pasalubong!",
+    "Meron kaming yema, espasol, muffins, pastillas, at marami pang iba.",
+    "Wala po kaming yema na square, puro triangle lang. Sorry.",
   ],
   SOUVENIRS: [
     "Keychains, magnets, tiny jeepneys.",
-    "Everything here says you went somewhere. That counts.",
+    "Everything here says you went somewhere. Thats right!.",
   ],
 };
 
@@ -170,10 +171,11 @@ function interactWith(target, st, g) {
     st.startDialogue({
       speaker: "Tom",
       lines: [
-        "Hey — you actually made it.",
-        "I'm Tom. I'll be your guide around here.",
+        "Hi babe, you actually made it.",
+        "I'm Tom, your boyfriend. I'll be your guide around here.",
+        "We are here at the airport, where it all started.",
         "Each gate is a month we've shared. The ones still locked? We just haven't lived them yet.",
-        "Stay close, Micah. Let's go remember everything.",
+        "Stay close baby. Let's go remember everything.",
       ],
       after: "recruit",
     });
