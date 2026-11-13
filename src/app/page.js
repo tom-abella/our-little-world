@@ -4,10 +4,12 @@ import GameCanvas from "@/game/GameCanvas";
 import HUD from "@/components/HUD";
 import DialogueBox from "@/components/DialogueBox";
 import MemoryModal from "@/components/MemoryModal";
+import StartScreen from "@/components/StartScreen";
 import TouchControls from "@/components/TouchControls";
 import { useGame } from "@/store/gameStore";
 
 export default function Home() {
+  const started = useGame((s) => s.started);
   const dialogue = useGame((s) => s.dialogue);
   const modal = useGame((s) => s.modal);
 
@@ -36,6 +38,7 @@ export default function Home() {
       </div>
 
       {modal && <MemoryModal memory={modal} />}
+      {!started && <StartScreen />}
     </main>
   );
 }

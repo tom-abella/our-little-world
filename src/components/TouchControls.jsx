@@ -29,9 +29,10 @@ export default function TouchControls() {
       navigator.maxTouchPoints > 0,
     () => false,
   );
+  const started = useGame((s) => s.started);
   const paused = useGame((s) => Boolean(s.dialogue || s.modal));
 
-  if (!touch || paused) return null;
+  if (!touch || !started || paused) return null;
 
   return (
     <>

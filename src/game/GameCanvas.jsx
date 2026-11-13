@@ -295,7 +295,7 @@ export default function GameCanvas() {
       }
 
       st = useGame.getState();
-      const paused = Boolean(st.dialogue || st.modal);
+      const paused = !st.started || Boolean(st.dialogue || st.modal);
       const sceneNow = sceneRef.current;
       const map = mapForScene(sceneNow);
 

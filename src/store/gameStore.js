@@ -1,11 +1,14 @@
 import { create } from "zustand";
 
 export const useGame = create((set, get) => ({
+  started: false,
   scene: "hub",
   recruited: false,
   musicOn: false,
   dialogue: null,
   modal: null,
+
+  startGame: () => set({ started: true }),
 
   setScene: (scene) => set({ scene }),
 
