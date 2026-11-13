@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+:root {
+  --background: #120d1c;
+  --foreground: #f7edf3;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-serif: Georgia, "Times New Roman", serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overscroll-behavior: none;
+}
+
+canvas {
+  image-rendering: auto;
+  touch-action: none;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-fade {
+  animation: fade-in 180ms ease-out both;
+}
+
+.animate-pop {
+  animation: pop-in 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
