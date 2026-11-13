@@ -26,7 +26,7 @@ export default function Home() {
       <div className="relative w-full max-w-5xl">
         <HUD />
 
-        <div className="relative mt-3 overflow-hidden rounded-2xl border-4 border-[#3a2b4a] bg-[#1a1424] shadow-[0_25px_70px_-20px_rgba(240,120,180,0.4)]">
+        <div className="game-shell no-select relative mt-3 overflow-hidden rounded-2xl border-4 border-[#3a2b4a] bg-[#1a1424] shadow-[0_25px_70px_-20px_rgba(240,120,180,0.4)]">
           <GameCanvas />
           {dialogue && <DialogueBox dialogue={dialogue} />}
           <TouchControls />

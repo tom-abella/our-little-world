@@ -13,11 +13,43 @@
   --font-serif: Georgia, "Times New Roman", serif;
 }
 
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
   overscroll-behavior: none;
+}
+
+.no-select {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.game-shell {
+  width: 100%;
+  margin-inline: auto;
+}
+
+.game-viewport {
+  width: 100%;
+  aspect-ratio: 5 / 3;
+}
+
+@media (max-width: 640px) {
+  .game-shell {
+    width: min(100%, calc((100dvh - 9rem) * 0.5625));
+    margin-inline: auto;
+  }
+
+  .game-viewport {
+    aspect-ratio: 324 / 576;
+  }
 }
 
 canvas {

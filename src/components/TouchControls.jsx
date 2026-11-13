@@ -36,7 +36,7 @@ export default function TouchControls() {
 
   return (
     <>
-      <div className="absolute bottom-3 left-3 z-30 grid h-28 w-28 grid-cols-3 grid-rows-3 gap-1 opacity-90">
+      <div className="no-select absolute bottom-3 left-3 z-30 grid h-28 w-28 grid-cols-3 grid-rows-3 gap-1 opacity-90">
         <span />
         <button type="button" aria-label="Move up" className={BTN} {...hold("ArrowUp")}>
           ▲
@@ -65,7 +65,8 @@ export default function TouchControls() {
           e.preventDefault();
           pressInteract();
         }}
-        className="absolute bottom-4 right-4 z-30 flex h-16 w-16 touch-none select-none flex-col items-center justify-center gap-1 rounded-full border-2 border-pink-200/40 bg-[#1b1329]/80 text-pink-100 backdrop-blur transition active:scale-95 active:bg-pink-300/40"
+        onContextMenu={(e) => e.preventDefault()}
+        className="no-select absolute bottom-4 right-4 z-30 flex h-16 w-16 touch-none select-none flex-col items-center justify-center gap-1 rounded-full border-2 border-pink-200/40 bg-[#1b1329]/80 text-pink-100 backdrop-blur transition active:scale-95 active:bg-pink-300/40"
       >
         <svg
           viewBox="0 0 24 24"
