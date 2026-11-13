@@ -31,27 +31,6 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.game-shell {
-  width: 100%;
-  margin-inline: auto;
-}
-
-.game-viewport {
-  width: 100%;
-  aspect-ratio: 5 / 3;
-}
-
-@media (max-width: 640px) {
-  .game-shell {
-    width: min(100%, calc((100dvh - 9rem) * 0.5625));
-    margin-inline: auto;
-  }
-
-  .game-viewport {
-    aspect-ratio: 324 / 576;
-  }
-}
-
 canvas {
   image-rendering: auto;
   touch-action: none;

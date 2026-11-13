@@ -14,7 +14,7 @@ export default function Home() {
   const modal = useGame((s) => s.modal);
 
   return (
-    <main className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-[#120d1c] px-3 py-4 sm:px-6 sm:py-6">
+    <main className="no-select relative flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-[#120d1c] px-3 py-4 sm:px-6 sm:py-6">
       <div
         className="pointer-events-none absolute inset-0 opacity-80"
         style={{
@@ -26,7 +26,7 @@ export default function Home() {
       <div className="relative w-full max-w-5xl">
         <HUD />
 
-        <div className="game-shell no-select relative mt-3 overflow-hidden rounded-2xl border-4 border-[#3a2b4a] bg-[#1a1424] shadow-[0_25px_70px_-20px_rgba(240,120,180,0.4)]">
+        <div className="no-select relative mt-3 overflow-hidden rounded-2xl border-4 border-[#3a2b4a] bg-[#1a1424] shadow-[0_25px_70px_-20px_rgba(240,120,180,0.4)]">
           <GameCanvas />
           {dialogue && <DialogueBox dialogue={dialogue} />}
           <TouchControls />

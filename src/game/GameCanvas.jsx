@@ -37,17 +37,6 @@ const MOVE_CODES = new Set([
   "KeyD",
 ]);
 const ACTION_CODES = new Set(["KeyE", "Space", "Enter"]);
-const MOBILE_QUERY = "(max-width: 640px)";
-const PHONE_VIEW = { w: 324, h: 576 };
-
-function cameraTarget(g, map, view) {
-  const maxX = Math.max(0, (map.width || WORLD_W) - view.w);
-  const maxY = Math.max(0, WORLD_H - view.h);
-  return {
-    x: Math.max(0, Math.min(maxX, g.x - view.w / 2)),
-    y: Math.max(0, Math.min(maxY, g.y - view.h / 2)),
-  };
-}
 
 const SHOP_LINES = {
   PASALUBONG: [
@@ -225,7 +214,6 @@ export default function GameCanvas() {
   const scene = useGame((s) => s.scene);
   const sceneRef = useRef(scene);
   const isTouchRef = useRef(false);
-  const viewRef = useRef({ w: WORLD_W, h: WORLD_H });
   const gameRef = useRef({
     x: 640,
     y: 460,
@@ -234,7 +222,6 @@ export default function GameCanvas() {
     near: null,
     trail: [],
     camX: 0,
-    camY: 0,
     riding: false,
     bike: null,
   });
@@ -251,9 +238,8 @@ export default function GameCanvas() {
     g.trail = [];
     g.riding = false;
     g.bike = map.bike ? { ...map.bike } : null;
-    const target = cameraTarget(g, map, viewRef.current);
-    g.camX = target.x;
-    g.camY = target.y;
+    const maxCam = (map.width || WORLD_W) - WORLD_W;
+    g.camX = Math.max(0, Math.min(maxCam, g.x - WORLD_W / 2));
     if (useGame.getState().recruited) fillTrailBehind(g);
     clearKeys();
   }, [scene]);
@@ -263,26 +249,10 @@ export default function GameCanvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const view = viewRef.current;
-    const applyViewport = () => {
-      const phone = window.matchMedia(MOBILE_QUERY).matches;
-      view.w = phone ? PHONE_VIEW.w : WORLD_W;
-      view.h = phone ? PHONE_VIEW.h : WORLD_H;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.round(view.w * dpr);
-      canvas.height = Math.round(view.h * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const g = gameRef.current;
-      const map = mapForScene(sceneRef.current);
-      const target = cameraTarget(g, map, view);
-      g.camX = target.x;
-      g.camY = target.y;
-    };
-
-    const mobileQuery = window.matchMedia(MOBILE_QUERY);
-    mobileQuery.addEventListener("change", applyViewport);
-    window.addEventListener("resize", applyViewport);
-    applyViewport();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = WORLD_W * dpr;
+    canvas.height = WORLD_H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     isTouchRef.current = window.matchMedia("(pointer: coarse)").matches;
 
     const onKeyDown = (e) => {
@@ -360,18 +330,17 @@ export default function GameCanvas() {
 
         g.near = findNear(map, sceneNow, st, g);
 
-        const target = cameraTarget(g, map, view);
-        const follow = Math.min(1, dt * 8);
-        g.camX += (target.x - g.camX) * follow;
-        g.camY += (target.y - g.camY) * follow;
+        const maxCam = (map.width || WORLD_W) - WORLD_W;
+        const targetCam = Math.max(0, Math.min(maxCam, g.x - WORLD_W / 2));
+        g.camX += (targetCam - g.camX) * Math.min(1, dt * 8);
       } else {
         g.moving = false;
         clearKeys();
       }
 
-      ctx.clearRect(0, 0, view.w, view.h);
+      ctx.clearRect(0, 0, WORLD_W, WORLD_H);
       ctx.save();
-      ctx.translate(-Math.round(g.camX), -Math.round(g.camY));
+      ctx.translate(-Math.round(g.camX), 0);
 
       drawWorld(ctx, sceneNow, map);
       const stage = sceneNow === "hub" ? null : STAGES.find((s) => s.id === sceneNow);
@@ -458,14 +427,12 @@ export default function GameCanvas() {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
       window.removeEventListener("blur", onBlur);
-      mobileQuery.removeEventListener("change", applyViewport);
-      window.removeEventListener("resize", applyViewport);
       clearKeys();
     };
   }, []);
 
   return (
-    <div className="game-viewport overflow-hidden bg-[#1a1424]">
+    <div className="relative aspect-[5/3] w-full overflow-hidden bg-[#1a1424]">
       <canvas
         ref={canvasRef}
         className="h-full w-full"
