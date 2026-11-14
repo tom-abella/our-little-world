@@ -5,9 +5,11 @@ import { readFile } from "node:fs/promises";
 const asModule = (source) => `data:text/javascript;base64,${Buffer.from(source).toString("base64")}`;
 const stages = asModule(await readFile(new URL("../src/data/stages.js", import.meta.url), "utf8"));
 const memories = asModule(await readFile(new URL("../src/data/sheriden.js", import.meta.url), "utf8"));
+const hubMemories = asModule(await readFile(new URL("../src/data/hub.js", import.meta.url), "utf8"));
 const source = (await readFile(new URL("../src/game/maps.js", import.meta.url), "utf8"))
   .replace('"@/data/stages"', JSON.stringify(stages))
-  .replace('"@/data/sheriden"', JSON.stringify(memories));
+  .replace('"@/data/sheriden"', JSON.stringify(memories))
+  .replace('"@/data/hub"', JSON.stringify(hubMemories));
 const { mapForScene } = await import(asModule(source));
 const { STAGES } = await import(stages);
 const targets = asModule(await readFile(new URL("../src/game/memoryTargets.js", import.meta.url), "utf8"));
@@ -48,7 +50,13 @@ test("Sheriden entrance and both rooms have reachable memories and exits", () =>
 
 test("requested landmarks open reachable memories without changing ordinary orbs", () => {
   for (const [stageId, expected] of [
-    [0, { "mem-0-2": "cafe" }],
+    [0, {
+      "mem-0-2": "cafe",
+      "mem-0-3": "cinema",
+      "mem-0-4": "samgyupsal",
+      "mem-0-6": "sidewalk",
+      "mem-0-7": "apartment",
+    }],
     [1, { "mem-1-1": "sign", "mem-1-3": "photobooth", "mem-1-4": "cafe", "mem-1-facetime": "videocall" }],
   ]) {
     const stage = STAGES.find((item) => item.id === stageId);
@@ -65,6 +73,31 @@ test("requested landmarks open reachable memories without changing ordinary orbs
       assert.equal(memoryTarget(memory, map).landmark, undefined);
     }
   }
+});
+
+test("Mark's memory is on a walkable sidewalk, not at Megamall", () => {
+  const map = mapForScene(0);
+  const stage = STAGES.find((item) => item.id === 0);
+  const sidewalk = map.props.find((prop) => prop.type === "sidewalk");
+  const mark = stage.memories.find((item) => item.id === "mem-0-6");
+  assert.ok(sidewalk);
+  assert.equal(memoryTarget(mark, map).landmark, sidewalk);
+  assert.ok(!stage.memories.some((memory) => memory.landmark === "megamall"));
+  assert.ok(canReach(map, { x: sidewalk.x + sidewalk.w / 2, y: sidewalk.y + sidewalk.h / 2 }, 10));
+});
+
+test("hub BOS Coffee has a reachable memory beside both pasalubong shops", () => {
+  const map = mapForScene("hub");
+  const coffee = map.props.find((prop) => prop.type === "bos-coffee");
+  assert.ok(coffee?.memory);
+  assert.equal(coffee.label, "BOS COFFEE");
+  const target = memoryTarget(coffee.memory, map);
+  assert.equal(target.landmark?.type, "bos-coffee");
+  assert.ok(canReach(map, target, target.radius));
+  assert.deepEqual(
+    map.props.filter((prop) => prop.type === "shop").map((prop) => prop.label).sort(),
+    ["PASALUBONG", "SOUVENIRS"],
+  );
 });
 
 test("lobby seesaw renders a circular handle at each end", async () => {

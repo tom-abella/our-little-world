@@ -5,6 +5,7 @@ import { useGame } from "@/store/gameStore";
 import { STAGES, isStageUnlocked, formatUnlockDate } from "@/data/stages";
 import { WORLD_W, WORLD_H, mapForScene } from "./maps";
 import { memoryTarget, targetDistance } from "./memoryTargets";
+import { MONTH_ONE_TOUR } from "@/data/tours";
 import {
   consumeInteract,
   clearKeys,
@@ -49,7 +50,206 @@ const SHOP_LINES = {
     "Keychains, magnets, tiny jeepneys.",
     "Everything here says you went somewhere. Thats right!.",
   ],
+  "BOS COFFEE": [
+    "Good morning! What can I get for you?",
+    "Two coffees for the flight? Coming right up.",
+    "Here you go. Take care, you two.",
+  ],
 };
+
+const TOUR_LINES = {
+  "BOS COFFEE": [
+    { speaker: "BOS COFFEE", text: "Good morning! What can I get for you?" },
+    { speaker: "BOS COFFEE", text: "Sorry sir, wala po kaming iced coffee, puro hot lang po." },
+    { speaker: "Tom", text: "Okay lang sayo hot babe?" },
+    { speaker: "Micah", text: "It's okay, cafe latte hot nalang din sakin babe." },
+    { speaker: "Tom", text: "Two hot cafe latte po XL." },
+    { speaker: "BOS COFFEE", text: "Name nalang po." },
+    { speaker: "Micah", text: "MJ :)" },
+    { speaker: "BOS COFFEE", text: "Tawagin nalang po kayo pag okay na. Thank you." },
+    { speaker: "BOS COFFEE", text: "Two hot cafe latte po for MJ :)" },
+    { speaker: "Tom", text: "Perfect." },
+    { speaker: "Tom", text: "Next stop pasalubong." },
+    { speaker: "Tom", text: "Bili lang ako babe ng mga pasalubong ko kila tita." },
+    { speaker: "Micah", text: "Let's go babe. Sama lang me sayo." },
+  ],
+  PASALUBONG: [
+    { speaker: "PASALUBONG", text: "Bili na po kayo ng pasalubong!" },
+    { speaker: "Tom", text: "Meron po ba kayong yema na square?" },
+    { speaker: "PASALUBONG", text: "Wala po kaming yema na square, puro triangle lang. Sorry." },
+    { speaker: "Tom", text: "Macapuno, pastillas, espasol nalang po." },
+    { speaker: "PASALUBONG", text: "Ito na po lahat sir. Thank you!" },
+    { speaker: "Micah", text: "Paano yan babe wala yung square? Check nalang natin sa iba." },
+    { speaker: "Tom", text: "Okay babe, Next stop: souvenirs." },
+  ],
+  SOUVENIRS: [
+    { speaker: "SOUVENIRS", text: "Keychains, magnets, tiny jeepneys." },
+    { speaker: "SOUVENIRS", text: "Bili na po kayo mam/sir." },
+    { speaker: "Tom", text: "Browse lang po." },
+    { speaker: "Micah", text: "I already have the best souvenir babe, It's you! Hehe" },
+    { speaker: "Tom", text: "Love you babe hehe." },
+    { speaker: "Micah", text: "Love you too babe." },
+    { speaker: "Tom", text: "Let's go babe to prologue." },
+    { speaker: "Tom", text: "Kung saan natin makikita yung mga some experience during our courting stage hehe." },
+  ],
+};
+
+const INTRO_LINES = [
+  { speaker: "Tom", text: "Hi babe. You actually made it." },
+  { speaker: "Micah", text: "You said you'd be my guide?" },
+  { speaker: "Tom", text: "That's the plan. Follow me—I'll show you around first." },
+  { speaker: "Micah", text: "Okay. Lead the way, guide." },
+];
+
+const FINAL_LINES = [
+  { speaker: "Tom", text: "We're here babe, to our courting stage A.K.A as the Prologue." },
+  { speaker: "Micah", text: "Where it all started." },
+  { speaker: "Tom", text: "Ready? Let's go in together." },
+];
+
+const TOM_SPEED = 125;
+const TOM_PATHS = {
+  "lead-coffee": [{ x: 640, y: 370 }, { x: 1080, y: 370 }],
+  "lead-pasalubong": [{ x: 371, y: 370 }],
+  "lead-souvenirs": [{ x: 891, y: 370 }],
+  "lead-prologue": [{ x: 240, y: 370 }, { x: 240, y: 180 }],
+};
+const NEXT_TOUR_STAGE = {
+  "lead-coffee": "at-coffee",
+  "lead-pasalubong": "at-pasalubong",
+  "lead-souvenirs": "at-souvenirs",
+  "lead-prologue": "at-prologue",
+};
+
+const PROLOGUE_MEMORIES = STAGES.find((stage) => stage.id === 0)?.memories ?? [];
+const PROLOGUE_ENTRY = { x: 480, y: 430 };
+const PROLOGUE_PATHS = [
+  [{ x: 480, y: 360 }],
+  [{ x: 190, y: 360 }, { x: 190, y: 220 }],
+  [{ x: 490, y: 220 }],
+  [{ x: 490, y: 450 }, { x: 300, y: 450 }],
+  [{ x: 610, y: 410 }],
+  [{ x: 610, y: 300 }, { x: 800, y: 220 }],
+  [{ x: 660, y: 300 }, { x: 660, y: 460 }],
+];
+const PROLOGUE_TOUR_LINES = {
+  "mem-0-1": [
+    { speaker: "Tom", text: "This is where our Greenfield walks started." },
+    { speaker: "Micah", text: "We walked the same blocks twice." },
+    { speaker: "Tom", text: "I'd have walked them a third time." },
+  ],
+  "mem-0-2": [
+    { speaker: "Tom", text: "Our coffee date. You already knew my order." },
+    { speaker: "Micah", text: "You always get the same thing." },
+    { speaker: "Tom", text: "And you still make it special." },
+  ],
+  "mem-0-3": [
+    { speaker: "Tom", text: "Our first cinema date." },
+    { speaker: "Micah", text: "You survived a horror movie." },
+    { speaker: "Tom", text: "Only because you were holding my arm." },
+  ],
+  "mem-0-4": [
+    { speaker: "Tom", text: "Samgyupsal at your favourite place." },
+    { speaker: "Micah", text: "We called Dad." },
+    { speaker: "Tom", text: "He was happy for us. I was too." },
+  ],
+  "mem-0-6": [
+    { speaker: "Tom", text: "And this is where you met Mark." },
+    { speaker: "Micah", text: "I was so nervous." },
+    { speaker: "Tom", text: "He liked you. I knew he would." },
+  ],
+  "mem-0-7": [
+    { speaker: "Tom", text: "Movie nights at the Airbnb." },
+    { speaker: "Micah", text: "We never finished a single movie." },
+    { speaker: "Tom", text: "I was too busy listening to you." },
+  ],
+  "mem-0-8": [
+    { speaker: "Tom", text: "Here is where I held your hand." },
+    { speaker: "Micah", text: "I thought I was going to lose you." },
+    { speaker: "Tom", text: "You won't. I'm not going anywhere." },
+  ],
+};
+
+const MONTH_ONE_MEMORIES = STAGES.find((stage) => stage.id === 1)?.memories ?? [];
+const MONTH_ONE_ENTRY = { x: 600, y: 430 };
+const MONTH_ONE_PATHS = [
+  [{ x: 600, y: 300 }, { x: 230, y: 300 }],
+  [{ x: 400, y: 300 }, { x: 400, y: 390 }],
+  [{ x: 400, y: 300 }, { x: 600, y: 220 }],
+  [{ x: 780, y: 300 }],
+  [{ x: 980, y: 300 }],
+  [{ x: 980, y: 240 }, { x: 1165, y: 230 }],
+  [{ x: 880, y: 230 }, { x: 880, y: 485 }, { x: 1165, y: 480 }],
+  [],
+  [{ x: 650, y: 480 }, { x: 650, y: 380 }],
+];
+const MONTH_ONE_TOUR_LINES = {
+  "mem-1-1": [
+    { speaker: "Tom", text: "Our first trip. You were so excited about the cold." },
+    { speaker: "Micah", text: "I made you walk everywhere." },
+    { speaker: "Tom", text: "I'd do it again, babe." },
+  ],
+  "mem-1-3": [
+    { speaker: "Tom", text: "Our first photobooth strip. You still have it?" },
+    { speaker: "Micah", text: "Of course. You look ridiculous." },
+    { speaker: "Tom", text: "Worth it." },
+  ],
+  "mem-1-4": [
+    { speaker: "Tom", text: "Our first coffee date as a couple." },
+    { speaker: "Micah", text: "Your coffee went cold." },
+    { speaker: "Tom", text: "Because I was busy falling for you." },
+  ],
+  "mem-1-2": [
+    { speaker: "Tom", text: "Our first date as a couple." },
+    { speaker: "Micah", text: "I was so nervous." },
+    { speaker: "Tom", text: "You hid it well. I didn't." },
+  ],
+  "mem-1-facetime": [
+    { speaker: "Tom", text: "And our FaceTime calls." },
+    { speaker: "Micah", text: "Even when we were far apart." },
+    { speaker: "Tom", text: "You always made the distance smaller." },
+  ],
+  "mem-1-5": [
+    { speaker: "Tom", text: "The first time I picked you up from work." },
+    { speaker: "Micah", text: "You were waiting outside Studio iKwaMe." },
+    { speaker: "Tom", text: "I'd wait for you every day." },
+  ],
+  "mem-1-6": [
+    { speaker: "Tom", text: "Almost two weeks together. No rush." },
+    { speaker: "Micah", text: "It felt like home." },
+    { speaker: "Tom", text: "That's what I want to remember." },
+  ],
+};
+const SHERIDEN_ROOM_LINES = {
+  "sheriden-lobby": [
+    { speaker: "Tom", text: "Our lobby memory. This little corner." },
+    { speaker: "Micah", text: "We talked here for hours." },
+    { speaker: "Tom", text: "I'd stay longer if I could." },
+  ],
+  "sheriden-roof": [
+    { speaker: "Tom", text: "The roof deck. The city looked so small from up here." },
+    { speaker: "Micah", text: "You held my hand the whole time." },
+    { speaker: "Tom", text: "I'd hold it again." },
+  ],
+};
+const SHERIDEN_ENTRY_LINES = {
+  "sheriden-lobby": [
+    { speaker: "Tom", text: "Let's start with the lobby, babe." },
+    { speaker: "Micah", text: "Okay. Lead the way." },
+  ],
+  "sheriden-roof": [
+    { speaker: "Tom", text: "Now the roof deck. I want to show you our view again." },
+    { speaker: "Micah", text: "I'd love that." },
+  ],
+};
+
+function shopReady(shop, tourStage) {
+  if (tourStage === "done") return true;
+  if (shop.type === "bos-coffee") return tourStage === "at-coffee";
+  if (shop.label === "PASALUBONG") return tourStage === "at-pasalubong";
+  if (shop.label === "SOUVENIRS") return tourStage === "at-souvenirs";
+  return false;
+}
 
 function blocked(x, y, solids) {
   return solids.some(
@@ -77,7 +277,7 @@ function fillTrailBehind(g) {
 function getTargets(map, scene, st, g) {
   if (scene === "hub") {
     const list = [];
-    if (!st.recruited) {
+    if (st.tourStage === "meet") {
       list.push({
         kind: "npc",
         x: map.npc.x,
@@ -90,6 +290,12 @@ function getTargets(map, scene, st, g) {
     for (const portal of map.portals) {
       const stage = STAGES.find((s) => s.id === portal.stageId);
       if (!stage) continue;
+      if (
+        st.tourStage !== "done" &&
+        (portal.stageId !== 0 || st.tourStage !== "at-prologue")
+      ) {
+        continue;
+      }
       const unlocked = isStageUnlocked(stage);
       const gateName = stage.gateLabel || `Month ${stage.id}`;
       list.push({
@@ -103,25 +309,63 @@ function getTargets(map, scene, st, g) {
       });
     }
     for (const shop of map.props) {
-      if (shop.type !== "shop") continue;
+      if (shop.type !== "shop" && shop.type !== "bos-coffee") continue;
+      if (!shopReady(shop, st.tourStage)) continue;
+      const coffee = shop.type === "bos-coffee";
       list.push({
         kind: "shop",
         name: shop.label,
-        x: shop.x + shop.w / 2,
-        y: shop.y + shop.h + 26,
-        promptY: shop.y + 30,
+        ...(coffee
+          ? {
+            landmark: shop,
+            x: shop.x + shop.w / 2,
+            y: shop.y + shop.h / 2,
+            promptY: shop.y - 8,
+            memory: shop.memory,
+          }
+          : {
+            x: shop.x + shop.w / 2,
+            y: shop.y + shop.h + 26,
+            promptY: shop.y + 30,
+          }),
         label: "Browse",
-        radius: 66,
+        radius: coffee ? 55 : 66,
       });
     }
     return list;
   }
 
   const stage = STAGES.find((s) => s.id === scene);
-  const list =
-    (map.memories || stage?.memories)?.map((memory) => memoryTarget(memory, map)) ?? [];
+  const prologueTour =
+    scene === 0 &&
+    (st.prologuePhase === "lead" || st.prologuePhase === "at");
+  const monthOneTour =
+    scene === 1 &&
+    (st.monthOnePhase === "lead" || st.monthOnePhase === "at");
+  const monthOneStop = monthOneTour
+    ? MONTH_ONE_TOUR[st.monthOneStep]
+    : null;
+  const memories = prologueTour
+    ? st.prologuePhase === "at" && PROLOGUE_MEMORIES[st.prologueStep]
+      ? [PROLOGUE_MEMORIES[st.prologueStep]]
+      : []
+    : monthOneTour
+      ? st.monthOnePhase === "at" && monthOneStop?.memoryId
+        ? [
+            MONTH_ONE_MEMORIES.find(
+              (memory) => memory.id === monthOneStop.memoryId,
+            ),
+          ].filter(Boolean)
+        : []
+      : map.memories || stage?.memories || [];
+  const list = memories.map((memory) => memoryTarget(memory, map));
 
-  if (map.sheridenEntrance) {
+  const sheridenReady =
+    !monthOneTour ||
+    (st.monthOnePhase === "at" &&
+      (monthOneStop?.kind === "sheriden-lobby" ||
+        monthOneStop?.kind === "sheriden-roof"));
+  if (map.sheridenEntrance && sheridenReady) {
     list.push({
       kind: "sheriden",
       x: map.sheridenEntrance.x,
@@ -144,7 +388,7 @@ function getTargets(map, scene, st, g) {
     });
   }
 
-  if (map.exit) {
+  if (map.exit && !prologueTour && !monthOneTour) {
     list.push({
       kind: "exit",
       x: map.exit.x,
@@ -175,18 +419,18 @@ function interactWith(target, st, g) {
   if (target.kind === "npc") {
     st.startDialogue({
       speaker: "Tom",
-      lines: [
-        "Hi babe, you actually made it.",
-        "I'm Tom, your boyfriend. I'll be your guide around here.",
-        "We are here at the airport, where it all started.",
-        "Each gate is a month we've shared. The ones still locked? We just haven't lived them yet.",
-        "Stay close baby. Let's go remember everything.",
-      ],
-      after: "recruit",
+      lines: INTRO_LINES,
+      after: "startTour",
     });
   } else if (target.kind === "portal") {
     const stage = STAGES.find((s) => s.id === target.stageId);
-    if (isStageUnlocked(stage)) {
+    if (stage.id === 0 && st.tourStage === "at-prologue") {
+      st.startDialogue({
+        speaker: "Tom",
+        lines: FINAL_LINES,
+        after: "enterPrologue",
+      });
+    } else if (isStageUnlocked(stage)) {
       st.setScene(stage.id);
     } else {
       st.startDialogue({
@@ -199,13 +443,54 @@ function interactWith(target, st, g) {
       });
     }
   } else if (target.kind === "shop") {
+    let lines =
+      SHOP_LINES[target.name] || ["Come in, come in. Everything must go."];
+    if (target.name === "BOS COFFEE" && st.tourStage === "at-coffee") {
+      lines = TOUR_LINES["BOS COFFEE"];
+      st.setTourStage("lead-pasalubong");
+    } else if (
+      target.name === "PASALUBONG" &&
+      st.tourStage === "at-pasalubong"
+    ) {
+      lines = TOUR_LINES.PASALUBONG;
+      st.setTourStage("lead-souvenirs");
+    } else if (
+      target.name === "SOUVENIRS" &&
+      st.tourStage === "at-souvenirs"
+    ) {
+      lines = TOUR_LINES.SOUVENIRS;
+      st.setTourStage("lead-prologue");
+    }
     st.startDialogue({
       speaker: target.name,
-      lines: SHOP_LINES[target.name] || ["Come in, come in. Everything must go."],
+      lines,
+      afterMemory: target.memory || null,
     });
   } else if (target.kind === "sheriden") {
-    g.sheridenReturn = { x: g.x, y: g.y, dir: g.dir, bike: g.bike && { ...g.bike } };
-    st.setChoosingSheriden(true);
+    g.sheridenReturn = {
+      x: g.x,
+      y: g.y,
+      dir: g.dir,
+      bike: g.bike && { ...g.bike },
+      tom: g.tom && { ...g.tom },
+    };
+    const stop = MONTH_ONE_TOUR[st.monthOneStep];
+    if (
+      st.scene === 1 &&
+      st.monthOnePhase === "at" &&
+      (stop?.kind === "sheriden-lobby" || stop?.kind === "sheriden-roof")
+    ) {
+      st.startDialogue({
+        speaker: "Tom",
+        lines: SHERIDEN_ENTRY_LINES[stop.kind] || [],
+        after:
+          stop.kind === "sheriden-lobby"
+            ? "enterSheridenLobby"
+            : "enterSheridenRoof",
+      });
+    } else {
+      st.setChoosingSheriden(true);
+    }
   } else if (target.kind === "bike") {
     g.riding = !g.riding;
     if (!g.riding) {
@@ -213,8 +498,56 @@ function interactWith(target, st, g) {
       g.bike = { x: g.x + side, y: g.y + 10, dir: g.dir };
     }
   } else if (target.kind === "memory") {
-    st.openMemory(target.memory);
+    if (st.scene === 0 && st.prologuePhase === "at") {
+      const last = st.prologueStep >= PROLOGUE_MEMORIES.length - 1;
+      if (last) st.queueContinuePrompt();
+      st.setPrologueProgress(
+        last ? st.prologueStep : st.prologueStep + 1,
+        last ? "done" : "lead",
+      );
+      st.startDialogue({
+        speaker: "Tom",
+        lines: PROLOGUE_TOUR_LINES[target.memory.id] || [
+          { speaker: "Tom", text: "Look at this one, babe." },
+        ],
+        afterMemory: target.memory,
+      });
+    } else if (
+      (st.scene === "sheriden-lobby" || st.scene === "sheriden-roof") &&
+      st.monthOnePhase !== "done"
+    ) {
+      st.startDialogue({
+        speaker: "Tom",
+        lines: SHERIDEN_ROOM_LINES[st.scene] || [],
+        afterMemory: target.memory,
+      });
+    } else if (st.scene === 1 && st.monthOnePhase === "at") {
+      const stop = MONTH_ONE_TOUR[st.monthOneStep];
+      if (stop?.memoryId === target.memory.id) {
+        const last = st.monthOneStep >= MONTH_ONE_TOUR.length - 1;
+        st.setMonthOneProgress(
+          last ? st.monthOneStep : st.monthOneStep + 1,
+          last ? "done" : "lead",
+        );
+        st.startDialogue({
+          speaker: "Tom",
+          lines: MONTH_ONE_TOUR_LINES[target.memory.id] || [
+            { speaker: "Tom", text: "I remember this, babe." },
+          ],
+          afterMemory: target.memory,
+        });
+      } else {
+        st.openMemory(target.memory);
+      }
+    } else {
+      st.openMemory(target.memory);
+    }
   } else if (target.kind === "exit") {
+    if (st.scene === "sheriden-lobby" && st.monthOnePhase !== "done") {
+      st.setMonthOneProgress(7, "at");
+    } else if (st.scene === "sheriden-roof" && st.monthOnePhase !== "done") {
+      st.setMonthOneProgress(8, "lead");
+    }
     st.setScene(target.destination);
   }
 }
@@ -235,6 +568,18 @@ export default function GameCanvas() {
     riding: false,
     bike: null,
     sheridenReturn: null,
+    tom: null,
+    tomPath: null,
+    tomStep: 0,
+    tourStage: "meet",
+    prologueStep: -1,
+    prologuePhase: "idle",
+    prologuePath: null,
+    prologuePathIndex: 0,
+    monthOneStep: -1,
+    monthOnePhase: "idle",
+    monthOnePath: null,
+    monthOnePathIndex: 0,
   });
 
   useEffect(() => {
@@ -250,6 +595,61 @@ export default function GameCanvas() {
     g.trail = [];
     g.riding = false;
     g.bike = returning ? returning.bike : map.bike ? { ...map.bike } : null;
+    const returnTom = returning?.tom;
+    g.tom = returnTom
+      ? { ...returnTom }
+      : map.npc
+        ? { x: map.npc.x, y: map.npc.y, dir: "down", moving: false }
+        : null;
+    g.tomPath = null;
+    g.tomStep = 0;
+    g.tourStage = useGame.getState().tourStage;
+    g.prologueStep = -1;
+    g.prologuePhase = "idle";
+    g.prologuePath = null;
+    g.prologuePathIndex = 0;
+    if (scene === 0) {
+      let prologue = useGame.getState();
+      if (prologue.prologuePhase === "idle" && prologue.storyMode) {
+        prologue.startPrologueTour();
+        prologue = useGame.getState();
+      }
+      if (prologue.prologuePhase === "lead") {
+        g.tom = { ...PROLOGUE_ENTRY, dir: "up", moving: false };
+      } else if (prologue.prologuePhase === "at") {
+        const stop =
+          PROLOGUE_PATHS[prologue.prologueStep]?.at(-1) || PROLOGUE_ENTRY;
+        g.tom = { x: stop.x, y: stop.y, dir: "down", moving: false };
+      } else {
+        g.tom = null;
+      }
+    }
+    g.monthOneStep = -1;
+    g.monthOnePhase = "idle";
+    g.monthOnePath = null;
+    g.monthOnePathIndex = 0;
+    if (scene === 1) {
+      useGame.setState({ monthOneInvited: false });
+      let monthOne = useGame.getState();
+      if (monthOne.monthOnePhase === "idle" && monthOne.storyMode) {
+        monthOne.startMonthOneTour();
+        monthOne = useGame.getState();
+      }
+      if (
+        !returnTom &&
+        (monthOne.monthOnePhase === "lead" ||
+          monthOne.monthOnePhase === "at")
+      ) {
+        const stop = MONTH_ONE_TOUR[monthOne.monthOneStep];
+        if (monthOne.monthOneStep === 0 || !stop?.tom) {
+          g.tom = { ...MONTH_ONE_ENTRY, dir: "down", moving: false };
+        } else {
+          g.tom = { ...stop.tom, dir: "down", moving: false };
+        }
+      } else if (monthOne.monthOnePhase === "done" && !returnTom) {
+        g.tom = null;
+      }
+    }
     if (scene !== "sheriden-lobby" && scene !== "sheriden-roof") g.sheridenReturn = null;
     const maxCam = (map.width || WORLD_W) - WORLD_W;
     g.camX = Math.max(0, Math.min(maxCam, g.x - WORLD_W / 2));
@@ -273,7 +673,10 @@ export default function GameCanvas() {
         e.preventDefault();
         setKey(e.code, true);
       }
-      if (ACTION_CODES.has(e.code)) {
+      if (e.code === "KeyE") {
+        e.preventDefault();
+        if (!e.repeat) pressInteract();
+      } else if (ACTION_CODES.has(e.code)) {
         const onButton =
           e.target instanceof HTMLElement && e.target.closest("button");
         if (!onButton) {
@@ -301,14 +704,26 @@ export default function GameCanvas() {
       const g = gameRef.current;
       let st = useGame.getState();
 
-      if (consumeInteract() && st.started && !st.choosingSheriden) {
+      if (
+        consumeInteract() &&
+        st.started &&
+        !st.choosingSheriden &&
+        !st.storyModePrompt
+      ) {
         if (st.modal) st.closeModal();
         else if (st.dialogue) st.advanceDialogue();
         else if (g.near) interactWith(g.near, st, g);
       }
 
       st = useGame.getState();
-      const paused = !st.started || Boolean(st.dialogue || st.modal || st.choosingSheriden);
+      const paused =
+        !st.started ||
+        Boolean(
+          st.dialogue ||
+            st.modal ||
+            st.choosingSheriden ||
+            st.storyModePrompt,
+        );
       const sceneNow = sceneRef.current;
       const map = mapForScene(sceneNow);
 
@@ -341,6 +756,157 @@ export default function GameCanvas() {
           if (g.trail.length > 21) g.trail.length = 21;
         }
 
+        if (sceneNow === "hub") {
+          if (st.tourStage !== g.tourStage) {
+            g.tourStage = st.tourStage;
+            g.tomStep = 0;
+            g.tomPath = TOM_PATHS[st.tourStage]
+              ? TOM_PATHS[st.tourStage].map((point) => ({ ...point }))
+              : null;
+          }
+          if (g.tom && g.tomPath && g.tomStep < g.tomPath.length) {
+            const target = g.tomPath[g.tomStep];
+            const dx = target.x - g.tom.x;
+            const dy = target.y - g.tom.y;
+            const dist = Math.hypot(dx, dy);
+            const step = TOM_SPEED * dt;
+            if (dist <= step) {
+              g.tom.x = target.x;
+              g.tom.y = target.y;
+              g.tomStep += 1;
+              g.tom.moving = false;
+              if (g.tomStep >= g.tomPath.length) {
+                g.tomPath = null;
+                const next = NEXT_TOUR_STAGE[st.tourStage];
+                if (next) useGame.getState().setTourStage(next);
+              }
+            } else {
+              g.tom.x += (dx / dist) * step;
+              g.tom.y += (dy / dist) * step;
+              g.tom.dir =
+                Math.abs(dx) > Math.abs(dy)
+                  ? dx > 0
+                    ? "right"
+                    : "left"
+                  : dy > 0
+                    ? "down"
+                    : "up";
+              g.tom.moving = true;
+            }
+          }
+        }
+
+        if (sceneNow === 0) {
+          if (
+            st.prologuePhase !== g.prologuePhase ||
+            st.prologueStep !== g.prologueStep
+          ) {
+            g.prologuePhase = st.prologuePhase;
+            g.prologueStep = st.prologueStep;
+            g.prologuePath = null;
+            g.prologuePathIndex = 0;
+            if (st.prologuePhase === "lead") {
+              g.prologuePath = (PROLOGUE_PATHS[st.prologueStep] || []).map(
+                (point) => ({ ...point }),
+              );
+            }
+          }
+          if (
+            g.tom &&
+            st.prologuePhase === "lead" &&
+            g.prologuePath &&
+            g.prologuePathIndex < g.prologuePath.length
+          ) {
+            const target = g.prologuePath[g.prologuePathIndex];
+            const dx = target.x - g.tom.x;
+            const dy = target.y - g.tom.y;
+            const dist = Math.hypot(dx, dy);
+            const step = TOM_SPEED * dt;
+            if (dist <= step) {
+              g.tom.x = target.x;
+              g.tom.y = target.y;
+              g.prologuePathIndex += 1;
+              g.tom.moving = false;
+              if (g.prologuePathIndex >= g.prologuePath.length) {
+                g.prologuePath = null;
+                useGame
+                  .getState()
+                  .setPrologueProgress(st.prologueStep, "at");
+              }
+            } else {
+              g.tom.x += (dx / dist) * step;
+              g.tom.y += (dy / dist) * step;
+              g.tom.dir =
+                Math.abs(dx) > Math.abs(dy)
+                  ? dx > 0
+                    ? "right"
+                    : "left"
+                  : dy > 0
+                    ? "down"
+                    : "up";
+              g.tom.moving = true;
+            }
+          }
+        }
+
+        if (sceneNow === 1) {
+          if (
+            st.monthOnePhase !== g.monthOnePhase ||
+            st.monthOneStep !== g.monthOneStep
+          ) {
+            g.monthOnePhase = st.monthOnePhase;
+            g.monthOneStep = st.monthOneStep;
+            g.monthOnePath = null;
+            g.monthOnePathIndex = 0;
+            if (st.monthOnePhase === "lead") {
+              g.monthOnePath = (MONTH_ONE_PATHS[st.monthOneStep] || []).map(
+                (point) => ({ ...point }),
+              );
+              if (g.monthOnePath.length === 0) {
+                useGame
+                  .getState()
+                  .setMonthOneProgress(st.monthOneStep, "at");
+              }
+            }
+          }
+          if (
+            g.tom &&
+            st.monthOnePhase === "lead" &&
+            g.monthOnePath &&
+            g.monthOnePathIndex < g.monthOnePath.length
+          ) {
+            const target = g.monthOnePath[g.monthOnePathIndex];
+            const dx = target.x - g.tom.x;
+            const dy = target.y - g.tom.y;
+            const dist = Math.hypot(dx, dy);
+            const step = TOM_SPEED * dt;
+            if (dist <= step) {
+              g.tom.x = target.x;
+              g.tom.y = target.y;
+              g.monthOnePathIndex += 1;
+              g.tom.moving = false;
+              if (g.monthOnePathIndex >= g.monthOnePath.length) {
+                g.monthOnePath = null;
+                useGame
+                  .getState()
+                  .setMonthOneProgress(st.monthOneStep, "at");
+              }
+            } else {
+              g.tom.x += (dx / dist) * step;
+              g.tom.y += (dy / dist) * step;
+              g.tom.dir =
+                Math.abs(dx) > Math.abs(dy)
+                  ? dx > 0
+                    ? "right"
+                    : "left"
+                  : dy > 0
+                    ? "down"
+                    : "up";
+              g.tom.moving = true;
+            }
+          }
+        }
+
         g.near = findNear(map, sceneNow, st, g);
 
         const maxCam = (map.width || WORLD_W) - WORLD_W;
@@ -356,11 +922,55 @@ export default function GameCanvas() {
       ctx.translate(-Math.round(g.camX), 0);
 
       drawWorld(ctx, sceneNow, map);
-      if (map.sheridenEntrance && g.near?.kind !== "sheriden") {
+      const monthOneTourActive =
+        sceneNow === 1 &&
+        (st.monthOnePhase === "lead" || st.monthOnePhase === "at");
+      const monthOneStop = monthOneTourActive
+        ? MONTH_ONE_TOUR[st.monthOneStep]
+        : null;
+      const sheridenReady =
+        !monthOneTourActive ||
+        (st.monthOnePhase === "at" &&
+          (monthOneStop?.kind === "sheriden-lobby" ||
+            monthOneStop?.kind === "sheriden-roof"));
+      if (
+        map.sheridenEntrance &&
+        sheridenReady &&
+        g.near?.kind !== "sheriden"
+      ) {
         drawBubble(ctx, map.sheridenEntrance.x, map.sheridenEntrance.y, now);
       }
       const stage = sceneNow === "hub" ? null : STAGES.find((s) => s.id === sceneNow);
-      for (const memory of map.memories || stage?.memories || []) {
+      const prologueTourActive =
+        sceneNow === 0 &&
+        (st.prologuePhase === "lead" || st.prologuePhase === "at");
+      for (const shop of map.props) {
+        if (shop.type !== "shop" && shop.type !== "bos-coffee") continue;
+        if (!shopReady(shop, st.tourStage)) continue;
+        if (g.near?.kind === "shop" && g.near.name === shop.label) continue;
+        drawBubble(ctx, shop.x + shop.w - 14, shop.y + 80, now);
+      }
+      if (sceneNow === "hub" && st.tourStage === "at-prologue") {
+        const prologue = map.portals.find((portal) => portal.stageId === 0);
+        if (prologue && g.near?.kind !== "portal") {
+          drawBubble(ctx, prologue.x, prologue.y, now);
+        }
+      }
+
+      const visibleMemories = prologueTourActive
+        ? st.prologuePhase === "at" && PROLOGUE_MEMORIES[st.prologueStep]
+          ? [PROLOGUE_MEMORIES[st.prologueStep]]
+          : []
+        : monthOneTourActive
+          ? st.monthOnePhase === "at" && monthOneStop?.memoryId
+            ? [
+                MONTH_ONE_MEMORIES.find(
+                  (memory) => memory.id === monthOneStop.memoryId,
+                ),
+              ].filter(Boolean)
+            : []
+          : map.memories || stage?.memories || [];
+      for (const memory of visibleMemories) {
         const target = memoryTarget(memory, map);
         if (target.landmark) {
           if (g.near?.memory?.id !== memory.id) {
@@ -381,7 +991,26 @@ export default function GameCanvas() {
         if (g.near?.kind !== "npc") drawBubble(ctx, map.npc.x, map.npc.y, now);
       }
 
-      if (st.recruited && !g.riding) {
+      const showingLeader =
+        (sceneNow === "hub" &&
+          st.tourStage !== "meet" &&
+          st.tourStage !== "done") ||
+        prologueTourActive ||
+        monthOneTourActive;
+
+      if (showingLeader && g.tom && !g.riding) {
+        drawCharacter(
+          ctx,
+          g.tom.x,
+          g.tom.y,
+          g.tom.dir,
+          TOM_LOOK,
+          now,
+          g.tom.moving,
+        );
+      }
+
+      if (st.recruited && !g.riding && !showingLeader) {
         const c = g.trail[Math.min(18, g.trail.length - 1)] || {
           x: g.x,
           y: g.y + 18,

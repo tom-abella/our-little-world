@@ -522,6 +522,39 @@ function drawAirportProps(ctx, p) {
     ctx.fillStyle = "rgba(80,60,30,0.28)";
     ctx.fillRect(p.x + 38, p.y + 24, 32, 4);
     ctx.fillRect(p.x + 38, p.y + 38, 32, 4);
+  } else if (p.type === "bos-coffee") {
+    ctx.fillStyle = "rgba(0,0,0,0.16)";
+    ctx.fillRect(p.x + 4, p.y + 8, p.w, p.h);
+    ctx.fillStyle = "#efe2cd";
+    ctx.fillRect(p.x, p.y, p.w, p.h);
+    ctx.fillStyle = "#6b4a36";
+    ctx.fillRect(p.x, p.y, p.w, 14);
+    for (let i = 0; i < Math.ceil(p.w / 22); i++) {
+      ctx.fillStyle = i % 2 ? "#f4e3c8" : "#b4574c";
+      ctx.fillRect(p.x + i * 22, p.y + 14, Math.min(22, p.x + p.w - (p.x + i * 22)), 10);
+    }
+    ctx.fillStyle = "#2c3440";
+    roundRect(ctx, p.x + 8, p.y + 28, p.w - 16, 22, 4);
+    ctx.fill();
+    label(ctx, "BOS COFFEE", p.x + p.w / 2, p.y + 39, "#ffe9d2", 10);
+    ctx.fillStyle = "#b98e63";
+    ctx.fillRect(p.x + 8, p.y + p.h - 20, p.w - 16, 14);
+    ctx.fillStyle = "#3a3f48";
+    roundRect(ctx, p.x + 16, p.y + 55, 26, 16, 3);
+    ctx.fill();
+    ctx.fillStyle = "#7fd6a8";
+    ctx.fillRect(p.x + 21, p.y + 59, 10, 5);
+    ctx.fillStyle = "#f8f4ec";
+    ctx.fillRect(p.x + 52, p.y + 57, 11, 13);
+    ctx.fillRect(p.x + 68, p.y + 57, 11, 13);
+    ctx.strokeStyle = "rgba(255,255,255,0.7)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(p.x + 58, p.y + 53);
+    ctx.quadraticCurveTo(p.x + 54, p.y + 48, p.x + 58, p.y + 43);
+    ctx.moveTo(p.x + 74, p.y + 53);
+    ctx.quadraticCurveTo(p.x + 70, p.y + 48, p.x + 74, p.y + 43);
+    ctx.stroke();
   } else if (p.type === "shop") {
     const accent = p.accent || "#c86a5a";
     ctx.fillStyle = "rgba(0,0,0,0.16)";
@@ -569,7 +602,61 @@ function drawAirportProps(ctx, p) {
 }
 
 function drawGreenfieldProps(ctx, p) {
-  if (p.type === "cafe") {
+  if (p.type === "sidewalk") {
+    ctx.fillStyle = "#9cc47c";
+    roundRect(ctx, p.x, p.y, p.w, p.h, 10);
+    ctx.fill();
+    ctx.strokeStyle = "#7fa966";
+    ctx.lineWidth = 2;
+    roundRect(ctx, p.x + 1, p.y + 1, p.w - 2, p.h - 2, 9);
+    ctx.stroke();
+
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(p.x + 12, p.y + p.h - 14);
+    ctx.quadraticCurveTo(p.x + p.w * 0.32, p.y + 8, p.x + p.w * 0.56, p.y + p.h - 16);
+    ctx.quadraticCurveTo(p.x + p.w * 0.76, p.y + p.h - 2, p.x + p.w - 12, p.y + 14);
+    ctx.strokeStyle = "#c8b48d";
+    ctx.lineWidth = 18;
+    ctx.stroke();
+    ctx.strokeStyle = "#e8d6b2";
+    ctx.lineWidth = 14;
+    ctx.stroke();
+    ctx.lineCap = "butt";
+
+    for (const [fx, fy, color] of [
+      [p.x + 28, p.y + 16, "#f2b7cb"],
+      [p.x + 44, p.y + 10, "#f6d488"],
+      [p.x + p.w - 34, p.y + p.h - 12, "#f2b7cb"],
+      [p.x + p.w - 52, p.y + p.h - 7, "#f6d488"],
+    ]) {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(fx, fy, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    for (const [bx, by, r] of [
+      [p.x + 18, p.y + p.h - 18, 9],
+      [p.x + p.w - 18, p.y + 18, 9],
+    ]) {
+      ctx.fillStyle = "#5d8f55";
+      ctx.beginPath();
+      ctx.arc(bx, by, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#74a966";
+      ctx.beginPath();
+      ctx.arc(bx - 2, by - 3, r / 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.fillStyle = "#6d5744";
+    ctx.fillRect(p.x + p.w - 44, p.y + 7, 3, 18);
+    ctx.fillStyle = "#ffe1a0";
+    ctx.beginPath();
+    ctx.arc(p.x + p.w - 42.5, p.y + 6, 4, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (p.type === "cafe") {
     ctx.fillStyle = "rgba(0,0,0,0.15)";
     ctx.fillRect(p.x + 6, p.y + 8, p.w, p.h);
     ctx.fillStyle = "#c4936c";

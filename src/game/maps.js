@@ -1,5 +1,6 @@
 import { STAGES } from "@/data/stages";
 import { SHERIDEN_MEMORIES } from "@/data/sheriden";
+import { HUB_COFFEE_MEMORY } from "@/data/hub";
 
 export const WORLD_W = 960;
 export const WORLD_H = 576;
@@ -26,24 +27,26 @@ export const HUB = {
     { stageId: 3, x: 1020, y: 112 },
   ],
   props: [
+    { type: "bos-coffee", x: 1110, y: 390, w: 130, h: 80, label: "BOS COFFEE", memory: HUB_COFFEE_MEMORY },
     { type: "desk", x: 285, y: 390, w: 190, h: 80 },
     { type: "seat", x: 798, y: 400, w: 210, h: 46 },
     { type: "seat", x: 798, y: 466, w: 210, h: 46 },
     { type: "shop", x: 276, y: 230, w: 190, h: 110, label: "PASALUBONG", accent: "#c86a5a" },
     { type: "shop", x: 796, y: 230, w: 190, h: 110, label: "SOUVENIRS", accent: "#4f8a7b" },
     { type: "luggage", x: 60, y: 450, w: 78, h: 52 },
-    { type: "plant", x: 1176, y: 440, w: 46, h: 46 },
+    { type: "plant", x: 160, y: 430, w: 46, h: 46 },
   ],
   solids: [
     ...border(HUB_W),
     { x: 0, y: 510, w: HUB_W, h: 42 },
+    { x: 1110, y: 390, w: 130, h: 80 },
     { x: 285, y: 390, w: 190, h: 80 },
     { x: 798, y: 400, w: 210, h: 46 },
     { x: 798, y: 466, w: 210, h: 46 },
     { x: 276, y: 230, w: 190, h: 110 },
     { x: 796, y: 230, w: 190, h: 110 },
     { x: 60, y: 450, w: 78, h: 52 },
-    { x: 1176, y: 440, w: 46, h: 46 },
+    { x: 160, y: 430, w: 46, h: 46 },
     { x: 206, y: 40, w: 68, h: 110 },
     { x: 466, y: 40, w: 68, h: 110 },
     { x: 726, y: 40, w: 68, h: 110 },
@@ -129,6 +132,7 @@ const greenfield = {
   spawn: { x: 480, y: 470 },
   exit: { x: 480, y: 534 },
   props: [
+    { type: "sidewalk", x: 520, y: 320, w: 180, h: 60 },
     { type: "cafe", x: 60, y: 40, w: 260, h: 130 },
     { type: "cinema", x: 380, y: 40, w: 220, h: 130 },
     { type: "apartment", x: 700, y: 40, w: 200, h: 130 },

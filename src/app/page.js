@@ -5,6 +5,8 @@ import HUD from "@/components/HUD";
 import DialogueBox from "@/components/DialogueBox";
 import MemoryModal from "@/components/MemoryModal";
 import StartScreen from "@/components/StartScreen";
+import ContinuePrompt from "@/components/ContinuePrompt";
+import StoryModePrompt from "@/components/StoryModePrompt";
 import SheridenChoice from "@/components/SheridenChoice";
 import TouchControls from "@/components/TouchControls";
 import { useGame } from "@/store/gameStore";
@@ -14,6 +16,8 @@ export default function Home() {
   const dialogue = useGame((s) => s.dialogue);
   const modal = useGame((s) => s.modal);
   const choosingSheriden = useGame((s) => s.choosingSheriden);
+  const monthOnePrompt = useGame((s) => s.monthOnePrompt);
+  const storyModePrompt = useGame((s) => s.storyModePrompt);
 
   return (
     <main className="no-select relative flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-[#120d1c] px-3 py-4 sm:px-6 sm:py-6">
@@ -41,6 +45,8 @@ export default function Home() {
       </div>
 
       {modal && <MemoryModal memory={modal} />}
+      {monthOnePrompt && <ContinuePrompt />}
+      {storyModePrompt && <StoryModePrompt />}
       {!started && <StartScreen />}
     </main>
   );

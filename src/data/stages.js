@@ -42,6 +42,7 @@ export const STAGES = [
         caption:
           "Triny na kita ayain before manood ng cinema, kaso it turns out hindi ka pala nanonood ng mga fictions like marvels spiderman. I'm happy na nakahanap tayo ng genre na gusto nating dalawa and thats a Horror.",
         imageUrl: "/images/prologue-photo3.jpg",
+        landmark: "cinema",
         x: 380,
         y: 220,
       },
@@ -53,6 +54,7 @@ export const STAGES = [
         caption:
           "We eat at your favorite samgyupsal place. Kahit na may iba kang memories na kumain dun, Happy pa rin ako kasi this time ako na ang kasama mo and we even call pa si Dad mo para asarin ng 'Nagkaon kana lab? sabay pakita sakin. Haha.",
         imageUrl: "/images/prologue-photo4.jpg",
+        landmark: "samgyupsal",
         x: 300,
         y: 460,
       },
@@ -60,12 +62,13 @@ export const STAGES = [
         id: "mem-0-6",
         title: "Meeting Mark for the First Time",
         date: "Before October 2026",
-        location: "Somewhere in Pasay",
+        location: "Greenfield park path, Pasay",
         caption:
           "I was happy na na meet mo na si mark na aking bestfriend. Happy rin ako kasi tingin ko naman naging comfortable sya sayo and sayo rin sakanya. ",
         imageUrl: "/images/prologue-photo6.jpg",
-        x: 700,
-        y: 350,
+        landmark: "sidewalk",
+        x: 620,
+        y: 356,
       },
       {
         id: "mem-0-7",
@@ -75,6 +78,7 @@ export const STAGES = [
         caption:
           "Actually, hindi ko talaga expected na dadating tayo sa point na mag aairbnb para manood lang ng movie, ito pa yung after natin manood tru google meet and decided the next is magkasama na. We watch movies, watch documentaries, and many more. Dumating pa sa point na almost every week tapos diretso pasok nalang kinabukasan hahaha.",
         imageUrl: "/images/prologue-photo7.jpg",
+        landmark: "apartment",
         x: 800,
         y: 220,
       },

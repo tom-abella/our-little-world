@@ -5,6 +5,9 @@ import { useGame } from "@/store/gameStore";
 export default function DialogueBox({ dialogue }) {
   const advanceDialogue = useGame((s) => s.advanceDialogue);
   const last = dialogue.index === dialogue.lines.length - 1;
+  const line = dialogue.lines[dialogue.index];
+  const speaker = typeof line === "string" ? dialogue.speaker : line.speaker;
+  const text = typeof line === "string" ? line : line.text;
 
   return (
     <div className="absolute inset-x-2 bottom-2 z-40 sm:inset-x-4 sm:bottom-4">
@@ -15,14 +18,14 @@ export default function DialogueBox({ dialogue }) {
       >
         <span className="mb-1 flex items-center justify-between gap-4">
           <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-pink-300 sm:text-xs">
-            {dialogue.speaker}
+            {speaker}
           </span>
           <span className="font-mono text-[9px] uppercase tracking-widest text-pink-200/40 sm:text-[10px]">
             {last ? "E / tap to close" : "E / tap to continue"}
           </span>
         </span>
         <span className="block min-h-12 text-sm leading-relaxed text-pink-50 sm:min-h-14 sm:text-base">
-          {dialogue.lines[dialogue.index]}
+          {text}
         </span>
         <span className="mt-2 flex justify-end">
           <span className="animate-pulse text-pink-300">▼</span>
