@@ -30,6 +30,7 @@ export const STAGES = [
         caption:
           "If i remember correctly, umuulan to and ito yung time na bumili ako ng gift para sa mga pamangkin ko and yung gift kong flower na para sayo. Ito rin yung time na nauna ka nang umorder tapos kabisado mo na yung go-to coffee ko sa starbucks and makes me kilig haha.",
         imageUrl: "/images/prologue-photo2.jpg",
+        landmark: "cafe",
         x: 190,
         y: 220,
       },
@@ -104,6 +105,7 @@ export const STAGES = [
         caption:
           "Our first travel and vacation together. Cold air, a long bus ride, and the realization that I could spend an entire trip doing nothing but walking around with you.",
         imageUrl: "/images/month1-photo1.jpg",
+        landmark: "sign",
         x: 230,
         y: 300,
       },
@@ -126,6 +128,7 @@ export const STAGES = [
         caption:
           "Four photos, terrible lighting, perfect company. I still have the strip. I look ridiculous in three of them, and you look proud of that.",
         imageUrl: "/images/month1-photo3.jpg",
+        landmark: "photobooth",
         x: 400,
         y: 390,
       },
@@ -137,6 +140,7 @@ export const STAGES = [
         caption:
           "Your coffee went cold because we kept talking. I remember giving up on finishing mine too, just to keep the conversation going a little longer.",
         imageUrl: "/images/month1-photo4.jpg",
+        landmark: "cafe",
         x: 600,
         y: 220,
       },
@@ -161,6 +165,17 @@ export const STAGES = [
         imageUrl: "/images/month1-photo6.jpg",
         x: 650,
         y: 430,
+      },
+      {
+        id: "mem-1-facetime",
+        title: "Our FaceTime Calls",
+        date: "October 2026",
+        location: "FaceTime",
+        caption: "Even when we were apart, seeing your face made the distance feel a little smaller.",
+        imageUrl: "/images/month1-facetime.jpg",
+        landmark: "videocall",
+        x: 980,
+        y: 395,
       },
     ],
   },

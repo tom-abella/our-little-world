@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useGame } from "@/store/gameStore";
 import { STAGES } from "@/data/stages";
+import { mapForScene } from "@/game/maps";
 import { startMusic, stopMusic } from "@/lib/music";
 
 export default function HUD() {
@@ -12,7 +13,7 @@ export default function HUD() {
   const toggleMusic = useGame((s) => s.toggleMusic);
 
   const stage = scene === "hub" ? null : STAGES.find((s) => s.id === scene);
-  const title = stage ? stage.title : "Our Little World";
+  const title = stage ? stage.title : mapForScene(scene).title || "Our Little World";
   const subtitle =
     scene === "hub"
       ? recruited

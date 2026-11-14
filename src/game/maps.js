@@ -1,4 +1,5 @@
 import { STAGES } from "@/data/stages";
+import { SHERIDEN_MEMORIES } from "@/data/sheriden";
 
 export const WORLD_W = 960;
 export const WORLD_H = 576;
@@ -154,6 +155,7 @@ const baguio = {
   spawn: { x: 600, y: 470 },
   exit: { x: 640, y: 534 },
   bike: { x: 330, y: 480, dir: "right" },
+  sheridenEntrance: { x: 1165, y: 474 },
   props: [
     { type: "mountain", x: 24, y: 24, w: 1232, h: 150 },
     { type: "sign", x: 140, y: 180, w: 150, h: 66, label: "BAGUIO" },
@@ -185,8 +187,76 @@ const baguio = {
 
 export const STAGE_MAPS = { cafe, park, night, greenfield, baguio };
 
+export const LOBBY_GROUPS = [
+  { x: 300, y: 100 },
+  { x: 550, y: 200 },
+  { x: 360, y: 325 },
+  { x: 730, y: 350 },
+];
+
+const SHERIDEN_ROOMS = {
+  "sheriden-lobby": {
+    type: "sheriden-lobby",
+    title: "Sheriden Towers: Lobby",
+    spawn: { x: 480, y: 440 },
+    exit: { x: 480, y: 534 },
+    exitLabel: "Back to Month 1",
+    returnScene: 1,
+    memories: [SHERIDEN_MEMORIES.lobby],
+    props: [
+      { type: "seesaw", x: 44, y: 223, w: 145, h: 32 },
+      { type: "lobby-memory-sofa", x: 490, y: 172, w: 120, h: 26 },
+    ],
+    solids: [
+      ...border(),
+      { x: 700, y: 65, w: 200, h: 120 },
+      { x: 60, y: 360, w: 200, h: 120 },
+      { x: 44, y: 223, w: 145, h: 32 },
+      ...LOBBY_GROUPS.flatMap(({ x, y }) => [
+        { x: x - 60, y: y - 28, w: 120, h: 26 },
+        { x: x - 36, y: y + 12, w: 72, h: 38 },
+        { x: x - 76, y: y + 15, w: 26, h: 34 },
+        { x: x + 50, y: y + 15, w: 26, h: 34 },
+      ]),
+    ],
+  },
+  "sheriden-roof": {
+    type: "sheriden-roof",
+    title: "Sheriden Towers: Roof Deck",
+    spawn: { x: 480, y: 440 },
+    exit: { x: 480, y: 534 },
+    exitLabel: "Back to Month 1",
+    returnScene: 1,
+    memories: [SHERIDEN_MEMORIES.roof],
+    props: [
+      { type: "sari-sari", x: 400, y: 195, w: 160, h: 85 },
+      { type: "roof-seating", x: 640, y: 320 },
+      { type: "roof-tree", x: 250, y: 145 },
+      { type: "roof-tree", x: 780, y: 145 },
+      { type: "roof-tree", x: 170, y: 410 },
+      { type: "roof-tree", x: 790, y: 410 },
+    ],
+    solids: [
+      ...border(),
+      { x: 104, y: 105, w: 752, h: 5 },
+      { x: 104, y: 105, w: 5, h: 366 },
+      { x: 851, y: 105, w: 5, h: 366 },
+      { x: 104, y: 466, w: 326, h: 5 },
+      { x: 530, y: 466, w: 326, h: 5 },
+      { x: 400, y: 195, w: 160, h: 85 },
+      { x: 606, y: 296, w: 68, h: 48 },
+      { x: 575, y: 307, w: 24, h: 26 },
+      { x: 681, y: 307, w: 24, h: 26 },
+      { x: 627, y: 270, w: 26, h: 20 },
+      { x: 627, y: 350, w: 26, h: 20 },
+      ...[{ x: 250, y: 145 }, { x: 780, y: 145 }, { x: 170, y: 410 }, { x: 790, y: 410 }].map(({ x, y }) => ({ x: x - 14, y: y - 10, w: 28, h: 24 })),
+    ],
+  },
+};
+
 export function mapForScene(scene) {
   if (scene === "hub") return HUB;
+  if (SHERIDEN_ROOMS[scene]) return SHERIDEN_ROOMS[scene];
   const stage = getStage(scene);
   return stage ? STAGE_MAPS[stage.theme] : HUB;
 }

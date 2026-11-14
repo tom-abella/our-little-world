@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { useGame } from "@/store/gameStore";
 import { STAGES, isStageUnlocked, formatUnlockDate } from "@/data/stages";
 import { WORLD_W, WORLD_H, mapForScene } from "./maps";
+import { memoryTarget, targetDistance } from "./memoryTargets";
 import {
   consumeInteract,
   clearKeys,
@@ -118,15 +119,18 @@ function getTargets(map, scene, st, g) {
 
   const stage = STAGES.find((s) => s.id === scene);
   const list =
-    stage?.memories.map((memory) => ({
-      kind: "memory",
-      memory,
-      x: memory.x,
-      y: memory.y,
-      promptY: memory.y - 48,
-      label: "Remember",
-      radius: 64,
-    })) ?? [];
+    (map.memories || stage?.memories)?.map((memory) => memoryTarget(memory, map)) ?? [];
+
+  if (map.sheridenEntrance) {
+    list.push({
+      kind: "sheriden",
+      x: map.sheridenEntrance.x,
+      y: map.sheridenEntrance.y,
+      promptY: map.sheridenEntrance.y - 55,
+      label: "Enter Sheriden",
+      radius: 65,
+    });
+  }
 
   if (map.bike) {
     const parked = g.bike || map.bike;
@@ -146,7 +150,8 @@ function getTargets(map, scene, st, g) {
       x: map.exit.x,
       y: map.exit.y,
       promptY: map.exit.y - 78,
-      label: "Back to Hub",
+      label: map.exitLabel || "Back to Hub",
+      destination: map.returnScene ?? "hub",
       radius: 58,
     });
   }
@@ -157,8 +162,8 @@ function findNear(map, scene, st, g) {
   let best = null;
   let bestDist = Infinity;
   for (const t of getTargets(map, scene, st, g)) {
-    const dist = (g.x - t.x) ** 2 + (g.y - t.y) ** 2;
-    if (dist < t.radius ** 2 && dist < bestDist) {
+    const dist = targetDistance(t, g.x, g.y);
+    if (dist < t.radius && dist < bestDist) {
       best = t;
       bestDist = dist;
     }
@@ -198,6 +203,9 @@ function interactWith(target, st, g) {
       speaker: target.name,
       lines: SHOP_LINES[target.name] || ["Come in, come in. Everything must go."],
     });
+  } else if (target.kind === "sheriden") {
+    g.sheridenReturn = { x: g.x, y: g.y, dir: g.dir, bike: g.bike && { ...g.bike } };
+    st.setChoosingSheriden(true);
   } else if (target.kind === "bike") {
     g.riding = !g.riding;
     if (!g.riding) {
@@ -207,7 +215,7 @@ function interactWith(target, st, g) {
   } else if (target.kind === "memory") {
     st.openMemory(target.memory);
   } else if (target.kind === "exit") {
-    st.setScene("hub");
+    st.setScene(target.destination);
   }
 }
 
@@ -226,20 +234,23 @@ export default function GameCanvas() {
     camX: 0,
     riding: false,
     bike: null,
+    sheridenReturn: null,
   });
 
   useEffect(() => {
     sceneRef.current = scene;
     const g = gameRef.current;
     const map = mapForScene(scene);
-    g.x = map.spawn.x;
-    g.y = map.spawn.y;
-    g.dir = "up";
+    const returning = scene === 1 && g.sheridenReturn;
+    g.x = returning ? returning.x : map.spawn.x;
+    g.y = returning ? returning.y : map.spawn.y;
+    g.dir = returning ? returning.dir : "up";
     g.moving = false;
     g.near = null;
     g.trail = [];
     g.riding = false;
-    g.bike = map.bike ? { ...map.bike } : null;
+    g.bike = returning ? returning.bike : map.bike ? { ...map.bike } : null;
+    if (scene !== "sheriden-lobby" && scene !== "sheriden-roof") g.sheridenReturn = null;
     const maxCam = (map.width || WORLD_W) - WORLD_W;
     g.camX = Math.max(0, Math.min(maxCam, g.x - WORLD_W / 2));
     if (useGame.getState().recruited) fillTrailBehind(g);
@@ -290,14 +301,14 @@ export default function GameCanvas() {
       const g = gameRef.current;
       let st = useGame.getState();
 
-      if (consumeInteract()) {
+      if (consumeInteract() && st.started && !st.choosingSheriden) {
         if (st.modal) st.closeModal();
         else if (st.dialogue) st.advanceDialogue();
         else if (g.near) interactWith(g.near, st, g);
       }
 
       st = useGame.getState();
-      const paused = !st.started || Boolean(st.dialogue || st.modal);
+      const paused = !st.started || Boolean(st.dialogue || st.modal || st.choosingSheriden);
       const sceneNow = sceneRef.current;
       const map = mapForScene(sceneNow);
 
@@ -345,9 +356,19 @@ export default function GameCanvas() {
       ctx.translate(-Math.round(g.camX), 0);
 
       drawWorld(ctx, sceneNow, map);
+      if (map.sheridenEntrance && g.near?.kind !== "sheriden") {
+        drawBubble(ctx, map.sheridenEntrance.x, map.sheridenEntrance.y, now);
+      }
       const stage = sceneNow === "hub" ? null : STAGES.find((s) => s.id === sceneNow);
-      if (stage) {
-        for (const memory of stage.memories) drawOrb(ctx, memory, now);
+      for (const memory of map.memories || stage?.memories || []) {
+        const target = memoryTarget(memory, map);
+        if (target.landmark) {
+          if (g.near?.memory?.id !== memory.id) {
+            drawBubble(ctx, target.landmark.x + target.landmark.w - 14, target.landmark.y + 80, now);
+          }
+        } else {
+          drawOrb(ctx, memory, now);
+        }
       }
 
       if (map.bike) {

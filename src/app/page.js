@@ -5,6 +5,7 @@ import HUD from "@/components/HUD";
 import DialogueBox from "@/components/DialogueBox";
 import MemoryModal from "@/components/MemoryModal";
 import StartScreen from "@/components/StartScreen";
+import SheridenChoice from "@/components/SheridenChoice";
 import TouchControls from "@/components/TouchControls";
 import { useGame } from "@/store/gameStore";
 
@@ -12,6 +13,7 @@ export default function Home() {
   const started = useGame((s) => s.started);
   const dialogue = useGame((s) => s.dialogue);
   const modal = useGame((s) => s.modal);
+  const choosingSheriden = useGame((s) => s.choosingSheriden);
 
   return (
     <main className="no-select relative flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-[#120d1c] px-3 py-4 sm:px-6 sm:py-6">
@@ -29,6 +31,7 @@ export default function Home() {
         <div className="no-select relative mt-3 overflow-hidden rounded-2xl border-4 border-[#3a2b4a] bg-[#1a1424] shadow-[0_25px_70px_-20px_rgba(240,120,180,0.4)]">
           <GameCanvas />
           {dialogue && <DialogueBox dialogue={dialogue} />}
+          {choosingSheriden && <SheridenChoice />}
           <TouchControls />
         </div>
 

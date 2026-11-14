@@ -1,5 +1,6 @@
 import { STAGES, isStageUnlocked } from "@/data/stages";
 import { WORLD_W, WORLD_H, WALL } from "./maps";
+import { drawSheridenWorld } from "./sheridenRender";
 
 export const MICAH_LOOK = {
   hair: "#7d4fc4",
@@ -387,7 +388,7 @@ function drawExit(ctx, map) {
     inner: "#8fd4c4",
     glow: "rgba(143,212,196,0.3)",
   });
-  label(ctx, "Back to Hub", map.exit.x, map.exit.y + 22, "#e7fff9", 11);
+  label(ctx, map.exitLabel || "Back to Hub", map.exit.x, map.exit.y + 22, "#e7fff9", 11);
 }
 
 function drawAirportWindows(ctx, w = WORLD_W) {
@@ -955,6 +956,12 @@ function drawGreenfieldProps(ctx, p) {
 
 export function drawWorld(ctx, scene, map) {
   const w = map.width || WORLD_W;
+
+  if (map.type === "sheriden-lobby" || map.type === "sheriden-roof") {
+    drawSheridenWorld(ctx, map);
+    drawExit(ctx, map);
+    return;
+  }
 
   if (map.type === "airport") {
     ctx.fillStyle = "#e3ddd0";

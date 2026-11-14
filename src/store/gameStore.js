@@ -7,10 +7,12 @@ export const useGame = create((set, get) => ({
   musicOn: false,
   dialogue: null,
   modal: null,
+  choosingSheriden: false,
 
   startGame: () => set({ started: true }),
 
   setScene: (scene) => set({ scene }),
+  setChoosingSheriden: (choosingSheriden) => set({ choosingSheriden }),
 
   toggleMusic: () => set((s) => ({ musicOn: !s.musicOn })),
 

@@ -30,7 +30,7 @@ export default function TouchControls() {
     () => false,
   );
   const started = useGame((s) => s.started);
-  const paused = useGame((s) => Boolean(s.dialogue || s.modal));
+  const paused = useGame((s) => Boolean(s.dialogue || s.modal || s.choosingSheriden));
 
   if (!touch || !started || paused) return null;
 
