@@ -14,10 +14,13 @@ export const useGame = create((set, get) => ({
   monthOneInvited: false,
   monthOneStep: 0,
   monthOnePhase: "idle",
+  monthOneClosing: false,
+  pendingMonthOneClosing: false,
   musicOn: false,
   dialogue: null,
   modal: null,
   choosingSheriden: false,
+  sheridenMemoryDone: false,
 
   startGame: () => set({ started: true, storyModePrompt: true }),
   startStoryMode: () => set({ storyModePrompt: false, storyMode: true }),
@@ -47,6 +50,7 @@ export const useGame = create((set, get) => ({
       pendingContinuePrompt: false,
       monthOneInvited: true,
       scene: "hub",
+      tourStage: "lead-month-one",
       dialogue: {
         speaker: "Tom",
         lines: [
@@ -65,7 +69,11 @@ export const useGame = create((set, get) => ({
   startMonthOneTour: () => set({ monthOneStep: 0, monthOnePhase: "lead" }),
   setMonthOneProgress: (monthOneStep, monthOnePhase) =>
     set({ monthOneStep, monthOnePhase }),
+  queueMonthOneClosing: () => set({ pendingMonthOneClosing: true }),
+  dismissMonthOneClosing: () => set({ monthOneClosing: false }),
   setChoosingSheriden: (choosingSheriden) => set({ choosingSheriden }),
+  markSheridenMemoryDone: () => set({ sheridenMemoryDone: true }),
+  resetSheridenMemoryDone: () => set({ sheridenMemoryDone: false }),
 
   toggleMusic: () => set((s) => ({ musicOn: !s.musicOn })),
 
@@ -102,5 +110,7 @@ export const useGame = create((set, get) => ({
       modal: null,
       monthOnePrompt: state.monthOnePrompt || state.pendingContinuePrompt,
       pendingContinuePrompt: false,
+      monthOneClosing: state.monthOneClosing || state.pendingMonthOneClosing,
+      pendingMonthOneClosing: false,
     })),
 }));

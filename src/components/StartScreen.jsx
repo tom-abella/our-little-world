@@ -1,9 +1,15 @@
 "use client";
 
 import { useGame } from "@/store/gameStore";
+import { unlockSfx } from "@/lib/sfx";
 
 export default function StartScreen() {
   const startGame = useGame((s) => s.startGame);
+
+  const handleStart = () => {
+    unlockSfx();
+    startGame();
+  };
 
   return (
     <div className="animate-fade fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[#0c0813]/85 p-4 backdrop-blur-md">
@@ -81,7 +87,7 @@ export default function StartScreen() {
           <button
             type="button"
             autoFocus
-            onClick={startGame}
+            onClick={handleStart}
             className="mt-8 rounded-full bg-pink-200 px-10 py-3 font-mono text-xs font-bold uppercase tracking-[0.3em] text-[#2a1630] transition hover:bg-pink-100 hover:shadow-[0_0_30px_rgba(255,170,210,0.45)] focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-100 focus-visible:ring-offset-2 focus-visible:ring-offset-[#150f1f] active:scale-95 sm:text-sm"
           >
             Start

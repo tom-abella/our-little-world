@@ -113,12 +113,42 @@ const TOM_PATHS = {
   "lead-pasalubong": [{ x: 371, y: 370 }],
   "lead-souvenirs": [{ x: 891, y: 370 }],
   "lead-prologue": [{ x: 240, y: 370 }, { x: 240, y: 180 }],
+  "lead-month-one": [{ x: 500, y: 300 }, { x: 500, y: 205 }],
 };
 const NEXT_TOUR_STAGE = {
   "lead-coffee": "at-coffee",
   "lead-pasalubong": "at-pasalubong",
   "lead-souvenirs": "at-souvenirs",
   "lead-prologue": "at-prologue",
+  "lead-month-one": "at-month-one",
+};
+
+// Where Tom walks to once you enter a Sheriden room, so Micah can follow him
+// to that room's memory instead of wandering the lobby alone.
+const SHERIDEN_GUIDES = {
+  "sheriden-lobby": {
+    start: { x: 480, y: 380 },
+    path: [{ x: 470, y: 320 }, { x: 445, y: 235 }, { x: 445, y: 205 }],
+  },
+  "sheriden-roof": {
+    start: { x: 480, y: 380 },
+    path: [{ x: 400, y: 360 }, { x: 280, y: 260 }, { x: 175, y: 185 }],
+  },
+};
+
+// After a room's memory is seen, Tom walks back to the exit so Micah can follow.
+const SHERIDEN_EXIT_PATHS = {
+  "sheriden-lobby": [
+    { x: 455, y: 265 },
+    { x: 480, y: 320 },
+    { x: 480, y: 480 },
+  ],
+  "sheriden-roof": [
+    { x: 280, y: 260 },
+    { x: 400, y: 360 },
+    { x: 480, y: 450 },
+    { x: 480, y: 480 },
+  ],
 };
 
 const PROLOGUE_MEMORIES = STAGES.find((stage) => stage.id === 0)?.memories ?? [];
@@ -172,13 +202,27 @@ const PROLOGUE_TOUR_LINES = {
 
 const MONTH_ONE_MEMORIES = STAGES.find((stage) => stage.id === 1)?.memories ?? [];
 const MONTH_ONE_ENTRY = { x: 600, y: 430 };
+const HOUSE_RIDE_START = { x: 370, y: 490 };
+const HOUSE_RIDE_PATH = [
+  { x: 650, y: 500 },
+  { x: 880, y: 500 },
+  { x: 880, y: 240 },
+  { x: 1165, y: 240 },
+];
+const SUNDO_RIDE_START = { x: 1165, y: 240 };
+const SUNDO_RIDE_PATH = [
+  { x: 880, y: 240 },
+  { x: 880, y: 500 },
+  { x: 1165, y: 500 },
+];
+const AUTO_RIDE_SPEED = 240;
 const MONTH_ONE_PATHS = [
   [{ x: 600, y: 300 }, { x: 230, y: 300 }],
   [{ x: 400, y: 300 }, { x: 400, y: 390 }],
   [{ x: 400, y: 300 }, { x: 600, y: 220 }],
   [{ x: 780, y: 300 }],
   [{ x: 980, y: 300 }],
-  [{ x: 980, y: 240 }, { x: 1165, y: 230 }],
+  [{ x: 880, y: 300 }, { x: 880, y: 480 }, { x: 650, y: 500 }, { x: 450, y: 500 }, { x: 370, y: 490 }],
   [{ x: 880, y: 230 }, { x: 880, y: 485 }, { x: 1165, y: 480 }],
   [],
   [{ x: 650, y: 480 }, { x: 650, y: 380 }],
@@ -290,12 +334,11 @@ function getTargets(map, scene, st, g) {
     for (const portal of map.portals) {
       const stage = STAGES.find((s) => s.id === portal.stageId);
       if (!stage) continue;
-      if (
-        st.tourStage !== "done" &&
-        (portal.stageId !== 0 || st.tourStage !== "at-prologue")
-      ) {
-        continue;
-      }
+      const portalAvailable =
+        st.tourStage === "done" ||
+        (portal.stageId === 0 && st.tourStage === "at-prologue") ||
+        (portal.stageId === 1 && st.tourStage === "at-month-one");
+      if (!portalAvailable) continue;
       const unlocked = isStageUnlocked(stage);
       const gateName = stage.gateLabel || `Month ${stage.id}`;
       list.push({
@@ -389,12 +432,16 @@ function getTargets(map, scene, st, g) {
   }
 
   if (map.exit && !prologueTour && !monthOneTour) {
+    const goToCityView =
+      scene === "sheriden-lobby" && st.monthOnePhase !== "done";
     list.push({
       kind: "exit",
       x: map.exit.x,
       y: map.exit.y,
       promptY: map.exit.y - 78,
-      label: map.exitLabel || "Back to Hub",
+      label: goToCityView
+        ? "Go to City View"
+        : map.exitLabel || "Back to Hub",
       destination: map.returnScene ?? "hub",
       radius: 58,
     });
@@ -431,6 +478,7 @@ function interactWith(target, st, g) {
         after: "enterPrologue",
       });
     } else if (isStageUnlocked(stage)) {
+      if (stage.id === 1) st.setTourStage("done");
       st.setScene(stage.id);
     } else {
       st.startDialogue({
@@ -516,6 +564,13 @@ function interactWith(target, st, g) {
       (st.scene === "sheriden-lobby" || st.scene === "sheriden-roof") &&
       st.monthOnePhase !== "done"
     ) {
+      if (!st.sheridenMemoryDone) {
+        st.markSheridenMemoryDone();
+        g.sheridenPath = (SHERIDEN_EXIT_PATHS[st.scene] || []).map(
+          (point) => ({ ...point }),
+        );
+        g.sheridenPathIndex = 0;
+      }
       st.startDialogue({
         speaker: "Tom",
         lines: SHERIDEN_ROOM_LINES[st.scene] || [],
@@ -525,6 +580,7 @@ function interactWith(target, st, g) {
       const stop = MONTH_ONE_TOUR[st.monthOneStep];
       if (stop?.memoryId === target.memory.id) {
         const last = st.monthOneStep >= MONTH_ONE_TOUR.length - 1;
+        if (last) st.queueMonthOneClosing();
         st.setMonthOneProgress(
           last ? st.monthOneStep : st.monthOneStep + 1,
           last ? "done" : "lead",
@@ -545,7 +601,10 @@ function interactWith(target, st, g) {
   } else if (target.kind === "exit") {
     if (st.scene === "sheriden-lobby" && st.monthOnePhase !== "done") {
       st.setMonthOneProgress(7, "at");
-    } else if (st.scene === "sheriden-roof" && st.monthOnePhase !== "done") {
+      st.setScene("sheriden-roof");
+      return;
+    }
+    if (st.scene === "sheriden-roof" && st.monthOnePhase !== "done") {
       st.setMonthOneProgress(8, "lead");
     }
     st.setScene(target.destination);
@@ -580,6 +639,10 @@ export default function GameCanvas() {
     monthOnePhase: "idle",
     monthOnePath: null,
     monthOnePathIndex: 0,
+    autoRide: null,
+    sundoRideReady: false,
+    sheridenPath: null,
+    sheridenPathIndex: 0,
   });
 
   useEffect(() => {
@@ -601,9 +664,19 @@ export default function GameCanvas() {
       : map.npc
         ? { x: map.npc.x, y: map.npc.y, dir: "down", moving: false }
         : null;
-    g.tomPath = null;
-    g.tomStep = 0;
     g.tourStage = useGame.getState().tourStage;
+    if (
+      scene === "hub" &&
+      g.tourStage === "at-prologue" &&
+      useGame.getState().prologuePhase === "done"
+    ) {
+      useGame.getState().setTourStage("lead-month-one");
+      g.tourStage = "lead-month-one";
+    }
+    g.tomPath = TOM_PATHS[g.tourStage]
+      ? TOM_PATHS[g.tourStage].map((point) => ({ ...point }))
+      : null;
+    g.tomStep = 0;
     g.prologueStep = -1;
     g.prologuePhase = "idle";
     g.prologuePath = null;
@@ -628,6 +701,8 @@ export default function GameCanvas() {
     g.monthOnePhase = "idle";
     g.monthOnePath = null;
     g.monthOnePathIndex = 0;
+    g.autoRide = null;
+    g.sundoRideReady = false;
     if (scene === 1) {
       useGame.setState({ monthOneInvited: false });
       let monthOne = useGame.getState();
@@ -649,6 +724,19 @@ export default function GameCanvas() {
       } else if (monthOne.monthOnePhase === "done" && !returnTom) {
         g.tom = null;
       }
+    }
+    g.sheridenPath = null;
+    g.sheridenPathIndex = 0;
+    const sheridenGuide = SHERIDEN_GUIDES[scene];
+    if (sheridenGuide) {
+      useGame.getState().resetSheridenMemoryDone();
+      g.tom = {
+        x: sheridenGuide.start.x,
+        y: sheridenGuide.start.y,
+        dir: "down",
+        moving: false,
+      };
+      g.sheridenPath = sheridenGuide.path.map((point) => ({ ...point }));
     }
     if (scene !== "sheriden-lobby" && scene !== "sheriden-roof") g.sheridenReturn = null;
     const maxCam = (map.width || WORLD_W) - WORLD_W;
@@ -708,7 +796,9 @@ export default function GameCanvas() {
         consumeInteract() &&
         st.started &&
         !st.choosingSheriden &&
-        !st.storyModePrompt
+        !st.storyModePrompt &&
+        !st.monthOneClosing &&
+        !g.autoRide
       ) {
         if (st.modal) st.closeModal();
         else if (st.dialogue) st.advanceDialogue();
@@ -722,38 +812,79 @@ export default function GameCanvas() {
           st.dialogue ||
             st.modal ||
             st.choosingSheriden ||
-            st.storyModePrompt,
+            st.storyModePrompt ||
+            st.monthOneClosing,
         );
       const sceneNow = sceneRef.current;
       const map = mapForScene(sceneNow);
 
       if (!paused) {
-        const { dx, dy } = moveVector();
-        g.moving = dx !== 0 || dy !== 0;
-        if (g.moving) {
-          if (Math.abs(dx) > Math.abs(dy)) g.dir = dx > 0 ? "right" : "left";
-          else if (dy !== 0) g.dir = dy > 0 ? "down" : "up";
+        if (g.autoRide) {
+          clearKeys();
+          g.moving = false;
+          const ride = g.autoRide;
+          const target = ride.path[ride.index];
+          if (!target) {
+            const rideStep = ride.step;
+            g.autoRide = null;
+            g.riding = false;
+            if (rideStep === 5) {
+              g.bike = { x: g.x - 70, y: g.y - 12, dir: "right" };
+            } else {
+              g.bike = { x: g.x + 46, y: g.y + 12, dir: "left" };
+            }
+            g.tom = { x: g.x - 24, y: g.y + 4, dir: "left", moving: false };
+            useGame.getState().setMonthOneProgress(rideStep, "at");
+          } else {
+            const rdx = target.x - g.x;
+            const rdy = target.y - g.y;
+            const dist = Math.hypot(rdx, rdy);
+            const step = AUTO_RIDE_SPEED * dt;
+            if (dist <= step) {
+              g.x = target.x;
+              g.y = target.y;
+              ride.index += 1;
+            } else {
+              g.x += (rdx / dist) * step;
+              g.y += (rdy / dist) * step;
+              g.dir =
+                Math.abs(rdx) > Math.abs(rdy)
+                  ? rdx > 0
+                    ? "right"
+                    : "left"
+                  : rdy > 0
+                    ? "down"
+                    : "up";
+            }
+          }
+        } else {
+          const { dx, dy } = moveVector();
+          g.moving = dx !== 0 || dy !== 0;
+          if (g.moving) {
+            if (Math.abs(dx) > Math.abs(dy)) g.dir = dx > 0 ? "right" : "left";
+            else if (dy !== 0) g.dir = dy > 0 ? "down" : "up";
 
-          const step = SPEED * (g.riding ? 1.65 : 1) * dt;
-          const solids =
-            !st.recruited && map.npc
-              ? map.solids.concat({
-                x: map.npc.x - 12,
-                y: map.npc.y - 20,
-                w: 24,
-                h: 40,
-              })
-              : map.solids;
-          const nx = g.x + dx * step;
-          if (!blocked(nx, g.y, solids)) g.x = nx;
-          const ny = g.y + dy * step;
-          if (!blocked(g.x, ny, solids)) g.y = ny;
-        }
+            const step = SPEED * (g.riding ? 1.65 : 1) * dt;
+            const solids =
+              !st.recruited && map.npc
+                ? map.solids.concat({
+                  x: map.npc.x - 12,
+                  y: map.npc.y - 20,
+                  w: 24,
+                  h: 40,
+                })
+                : map.solids;
+            const nx = g.x + dx * step;
+            if (!blocked(nx, g.y, solids)) g.x = nx;
+            const ny = g.y + dy * step;
+            if (!blocked(g.x, ny, solids)) g.y = ny;
+          }
 
-        if (st.recruited) {
-          if (g.trail.length === 0) fillTrailBehind(g);
-          g.trail.unshift({ x: g.x, y: g.y, dir: g.dir });
-          if (g.trail.length > 21) g.trail.length = 21;
+          if (st.recruited) {
+            if (g.trail.length === 0) fillTrailBehind(g);
+            g.trail.unshift({ x: g.x, y: g.y, dir: g.dir });
+            if (g.trail.length > 21) g.trail.length = 21;
+          }
         }
 
         if (sceneNow === "hub") {
@@ -858,14 +989,36 @@ export default function GameCanvas() {
             g.monthOneStep = st.monthOneStep;
             g.monthOnePath = null;
             g.monthOnePathIndex = 0;
+            g.autoRide = null;
+            g.sundoRideReady = false;
             if (st.monthOnePhase === "lead") {
-              g.monthOnePath = (MONTH_ONE_PATHS[st.monthOneStep] || []).map(
-                (point) => ({ ...point }),
-              );
-              if (g.monthOnePath.length === 0) {
-                useGame
-                  .getState()
-                  .setMonthOneProgress(st.monthOneStep, "at");
+              if (st.storyMode && st.monthOneStep === 6) {
+                // First sundo -> Sheriden Towers: a short automatic ride.
+                g.autoRide = {
+                  path: SUNDO_RIDE_PATH.map((point) => ({ ...point })),
+                  index: 0,
+                  step: 6,
+                };
+                g.riding = true;
+                g.moving = false;
+                g.x = SUNDO_RIDE_START.x;
+                g.y = SUNDO_RIDE_START.y;
+                g.dir = "left";
+                g.trail = [];
+              } else {
+                if (st.storyMode && st.monthOneStep === 5) {
+                  // Before the first sundo, go to Tom's house for his motorcycle.
+                  g.riding = false;
+                  g.bike = map.bike ? { ...map.bike } : g.bike;
+                }
+                g.monthOnePath = (MONTH_ONE_PATHS[st.monthOneStep] || []).map(
+                  (point) => ({ ...point }),
+                );
+                if (g.monthOnePath.length === 0) {
+                  useGame
+                    .getState()
+                    .setMonthOneProgress(st.monthOneStep, "at");
+                }
               }
             }
           }
@@ -887,9 +1040,13 @@ export default function GameCanvas() {
               g.tom.moving = false;
               if (g.monthOnePathIndex >= g.monthOnePath.length) {
                 g.monthOnePath = null;
-                useGame
-                  .getState()
-                  .setMonthOneProgress(st.monthOneStep, "at");
+                if (st.storyMode && st.monthOneStep === 5) {
+                  g.sundoRideReady = true;
+                } else {
+                  useGame
+                    .getState()
+                    .setMonthOneProgress(st.monthOneStep, "at");
+                }
               }
             } else {
               g.tom.x += (dx / dist) * step;
@@ -907,7 +1064,61 @@ export default function GameCanvas() {
           }
         }
 
-        g.near = findNear(map, sceneNow, st, g);
+        if (
+          g.sundoRideReady &&
+          g.tom &&
+          !g.autoRide &&
+          Math.hypot(g.x - g.tom.x, g.y - g.tom.y) < 120
+        ) {
+          g.sundoRideReady = false;
+          g.autoRide = {
+            path: HOUSE_RIDE_PATH.map((point) => ({ ...point })),
+            index: 0,
+            step: 5,
+          };
+          g.riding = true;
+          g.moving = false;
+          g.x = HOUSE_RIDE_START.x;
+          g.y = HOUSE_RIDE_START.y;
+          g.dir = "right";
+          g.trail = [];
+        }
+
+        if (SHERIDEN_GUIDES[sceneNow] && g.tom) {
+          if (
+            g.sheridenPath &&
+            g.sheridenPathIndex < g.sheridenPath.length
+          ) {
+            const target = g.sheridenPath[g.sheridenPathIndex];
+            const dx = target.x - g.tom.x;
+            const dy = target.y - g.tom.y;
+            const dist = Math.hypot(dx, dy);
+            const step = TOM_SPEED * dt;
+            if (dist <= step) {
+              g.tom.x = target.x;
+              g.tom.y = target.y;
+              g.sheridenPathIndex += 1;
+              g.tom.moving = false;
+              if (g.sheridenPathIndex >= g.sheridenPath.length) {
+                g.sheridenPath = null;
+              }
+            } else {
+              g.tom.x += (dx / dist) * step;
+              g.tom.y += (dy / dist) * step;
+              g.tom.dir =
+                Math.abs(dx) > Math.abs(dy)
+                  ? dx > 0
+                    ? "right"
+                    : "left"
+                  : dy > 0
+                    ? "down"
+                    : "up";
+              g.tom.moving = true;
+            }
+          }
+        }
+
+        g.near = g.autoRide ? null : findNear(map, sceneNow, st, g);
 
         const maxCam = (map.width || WORLD_W) - WORLD_W;
         const targetCam = Math.max(0, Math.min(maxCam, g.x - WORLD_W / 2));
@@ -996,7 +1207,9 @@ export default function GameCanvas() {
           st.tourStage !== "meet" &&
           st.tourStage !== "done") ||
         prologueTourActive ||
-        monthOneTourActive;
+        monthOneTourActive ||
+        sceneNow === "sheriden-lobby" ||
+        sceneNow === "sheriden-roof";
 
       if (showingLeader && g.tom && !g.riding) {
         drawCharacter(
@@ -1054,6 +1267,18 @@ export default function GameCanvas() {
         );
       } else {
         drawCharacter(ctx, g.x, g.y, g.dir, MICAH_LOOK, now, g.moving);
+      }
+
+      const sundoRideReady =
+        sceneNow === 1 &&
+        st.monthOnePhase === "lead" &&
+        st.monthOneStep === 5 &&
+        !g.riding;
+      if (g.autoRide) {
+        drawBubble(ctx, g.x, g.y, now);
+      } else if (sundoRideReady) {
+        const parked = g.bike || map.bike;
+        if (parked) drawBubble(ctx, parked.x, parked.y, now);
       }
 
       if (!paused && g.near) {

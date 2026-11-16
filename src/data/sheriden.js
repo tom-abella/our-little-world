@@ -3,7 +3,7 @@ export const SHERIDEN_MEMORIES = {
   lobby: {
     id: "sheriden-lobby-memory",
     title: "Our Lobby Corner",
-    date: "October 2026",
+    date: "November 2026",
     location: "Sheriden Towers · Lobby",
     caption: "A little spot in the lobby, and another moment I get to remember with you.",
     imageUrl: "/images/sheriden-lobby.jpg",
@@ -14,7 +14,7 @@ export const SHERIDEN_MEMORIES = {
   roof: {
     id: "sheriden-roof-memory",
     title: "Above the City Together",
-    date: "October 2026",
+    date: "November 2026",
     location: "Sheriden Towers · Roof deck",
     caption: "The city lights stretched out below us. My favourite part of the view was sharing it with you.",
     imageUrl: "/images/sheriden-roof.jpg",

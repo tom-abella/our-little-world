@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useGame } from "@/store/gameStore";
+import { playDialogueBlip } from "@/lib/sfx";
 
 export default function DialogueBox({ dialogue }) {
   const advanceDialogue = useGame((s) => s.advanceDialogue);
@@ -8,6 +10,14 @@ export default function DialogueBox({ dialogue }) {
   const line = dialogue.lines[dialogue.index];
   const speaker = typeof line === "string" ? dialogue.speaker : line.speaker;
   const text = typeof line === "string" ? line : line.text;
+  const playedRef = useRef(null);
+
+  useEffect(() => {
+    const key = `${dialogue.index}:${text}`;
+    if (playedRef.current === key) return;
+    playedRef.current = key;
+    playDialogueBlip();
+  }, [dialogue.index, text]);
 
   return (
     <div className="absolute inset-x-2 bottom-2 z-40 sm:inset-x-4 sm:bottom-4">

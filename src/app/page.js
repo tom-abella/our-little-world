@@ -6,6 +6,7 @@ import DialogueBox from "@/components/DialogueBox";
 import MemoryModal from "@/components/MemoryModal";
 import StartScreen from "@/components/StartScreen";
 import ContinuePrompt from "@/components/ContinuePrompt";
+import MonthOneClosing from "@/components/MonthOneClosing";
 import StoryModePrompt from "@/components/StoryModePrompt";
 import SheridenChoice from "@/components/SheridenChoice";
 import TouchControls from "@/components/TouchControls";
@@ -17,6 +18,7 @@ export default function Home() {
   const modal = useGame((s) => s.modal);
   const choosingSheriden = useGame((s) => s.choosingSheriden);
   const monthOnePrompt = useGame((s) => s.monthOnePrompt);
+  const monthOneClosing = useGame((s) => s.monthOneClosing);
   const storyModePrompt = useGame((s) => s.storyModePrompt);
 
   return (
@@ -46,6 +48,7 @@ export default function Home() {
 
       {modal && <MemoryModal memory={modal} />}
       {monthOnePrompt && <ContinuePrompt />}
+      {monthOneClosing && <MonthOneClosing />}
       {storyModePrompt && <StoryModePrompt />}
       {!started && <StartScreen />}
     </main>

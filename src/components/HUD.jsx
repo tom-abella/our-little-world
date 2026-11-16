@@ -16,6 +16,8 @@ const TOUR_HINTS = {
   "at-souvenirs": "Browse the Souvenirs shop",
   "lead-prologue": "Follow Tom to the Prologue",
   "at-prologue": "Enter the Prologue with Tom",
+  "lead-month-one": "Follow Tom to the Month 1 gate",
+  "at-month-one": "Enter Month 1 with Tom",
 };
 
 export default function HUD() {
@@ -27,6 +29,7 @@ export default function HUD() {
   const monthOneInvited = useGame((s) => s.monthOneInvited);
   const monthOneStep = useGame((s) => s.monthOneStep);
   const monthOnePhase = useGame((s) => s.monthOnePhase);
+  const sheridenMemoryDone = useGame((s) => s.sheridenMemoryDone);
   const musicOn = useGame((s) => s.musicOn);
   const toggleMusic = useGame((s) => s.toggleMusic);
 
@@ -62,7 +65,11 @@ export default function HUD() {
           : scene === 0 && prologuePhase === "done"
             ? "Explore the memories, then head home"
             : scene === 1 && monthOnePhase === "lead"
-              ? `Follow Tom to ${monthOneTitle}`
+              ? monthOneStep === 5
+                ? "Go to Tom's house and ride the motorcycle"
+                : monthOneStep === 6
+                  ? "Riding with Tom to Sheriden Towers"
+                  : `Follow Tom to ${monthOneTitle}`
               : scene === 1 && monthOnePhase === "at"
                 ? monthOneStop?.kind
                   ? `Enter ${monthOneTitle}`
@@ -72,8 +79,12 @@ export default function HUD() {
                   : (scene === "sheriden-lobby" || scene === "sheriden-roof") &&
                       monthOnePhase !== "done"
                     ? scene === "sheriden-lobby"
-                      ? "Remember our lobby memory"
-                      : "Remember the roof-deck memory"
+                      ? sheridenMemoryDone
+                        ? "Follow Tom to the city view"
+                        : "Remember our lobby memory"
+                      : sheridenMemoryDone
+                        ? "Follow Tom back to Month 1"
+                        : "Remember the roof-deck memory"
                     : "Collect the memories, then head home";
 
   useEffect(() => () => stopMusic(), []);
