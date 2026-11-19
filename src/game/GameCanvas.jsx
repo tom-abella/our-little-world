@@ -798,7 +798,8 @@ export default function GameCanvas() {
         !st.choosingSheriden &&
         !st.storyModePrompt &&
         !st.monthOneClosing &&
-        !g.autoRide
+        !g.autoRide &&
+        !st.monthOnePrompt
       ) {
         if (st.modal) st.closeModal();
         else if (st.dialogue) st.advanceDialogue();
@@ -813,7 +814,8 @@ export default function GameCanvas() {
             st.modal ||
             st.choosingSheriden ||
             st.storyModePrompt ||
-            st.monthOneClosing,
+            st.monthOneClosing ||
+            st.monthOnePrompt,
         );
       const sceneNow = sceneRef.current;
       const map = mapForScene(sceneNow);
