@@ -16,6 +16,7 @@ import {
 import {
   drawWorld,
   drawOrb,
+  drawFlowerMemory,
   drawCharacter,
   drawPrompt,
   drawBubble,
@@ -1170,6 +1171,9 @@ export default function GameCanvas() {
         }
       }
 
+      const flowerMemory = sceneNow === 1 && MONTH_ONE_MEMORIES.find((memory) => memory.id === "mem-1-flowers");
+      if (flowerMemory) drawFlowerMemory(ctx, flowerMemory);
+
       const visibleMemories = prologueTourActive
         ? st.prologuePhase === "at" && PROLOGUE_MEMORIES[st.prologueStep]
           ? [PROLOGUE_MEMORIES[st.prologueStep]]
@@ -1185,7 +1189,9 @@ export default function GameCanvas() {
           : map.memories || stage?.memories || [];
       for (const memory of visibleMemories) {
         const target = memoryTarget(memory, map);
-        if (target.landmark) {
+        if (memory.id === "mem-1-flowers") {
+          if (g.near?.memory?.id !== memory.id) drawBubble(ctx, memory.x, memory.y - 30, now);
+        } else if (target.landmark) {
           if (g.near?.memory?.id !== memory.id) {
             drawBubble(ctx, target.landmark.x + target.landmark.w - 14, target.landmark.y + 80, now);
           }

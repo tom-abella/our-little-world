@@ -1285,6 +1285,36 @@ export function drawBike(ctx, x, y, dir, now) {
   ctx.restore();
 }
 
+export function drawFlowerMemory(ctx, memory) {
+  ctx.save();
+  ctx.translate(memory.x, memory.y);
+  ctx.fillStyle = "rgba(0,0,0,0.2)";
+  ctx.beginPath();
+  ctx.ellipse(0, 15, 20, 6, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = "#557f60";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(-5, 10); ctx.lineTo(-13, -16);
+  ctx.moveTo(5, 10); ctx.lineTo(12, -16);
+  ctx.stroke();
+  ctx.fillStyle = "#a479c9";
+  ctx.beginPath();
+  ctx.moveTo(-23, -29); ctx.lineTo(-19, -13); ctx.quadraticCurveTo(-13, -7, -7, -13);
+  ctx.lineTo(-3, -29); ctx.lineTo(-10, -24); ctx.lineTo(-13, -32); ctx.lineTo(-16, -24); ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = "#6a9ed7";
+  ctx.beginPath(); ctx.arc(12, -21, 10, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "#f3c879";
+  ctx.beginPath(); ctx.arc(12, -21, 3, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "#f5e7d5";
+  ctx.beginPath(); ctx.moveTo(-20, -2); ctx.lineTo(20, -2); ctx.lineTo(7, 16); ctx.lineTo(-7, 16); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = "#d294a5";
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(-6, 7); ctx.lineTo(6, 7); ctx.stroke();
+  ctx.restore();
+}
+
 export function drawOrb(ctx, memory, now) {
   const t = now / 1000;
   const bob = Math.sin(t * 2 + memory.x * 0.05) * 4;
