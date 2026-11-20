@@ -104,6 +104,17 @@ export const STAGES = [
     theme: "baguio",
     memories: [
       {
+        id: "mem-1-flowers",
+        title: "Flowers for Each Other",
+        date: "November 2026",
+        location: "Our first month",
+        caption:
+          "I gave you purple tulips, and you gave me a blue flower too. It was the first time someone had ever given me a flower, and it meant so much to me that it was you. Thank you, babe, for making me feel so loved. I will always remember this little exchange of ours.",
+        imageUrl: "/images/month1-flowers.svg",
+        x: 320,
+        y: 300,
+      },
+      {
         id: "mem-1-1",
         title: "First Baguio Trip",
         date: "November 2026",

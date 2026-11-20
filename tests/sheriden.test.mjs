@@ -86,6 +86,17 @@ test("Mark's memory is on a walkable sidewalk, not at Megamall", () => {
   assert.ok(canReach(map, { x: sidewalk.x + sidewalk.w / 2, y: sidewalk.y + sidewalk.h / 2 }, 10));
 });
 
+test("flower exchange is reachable in Month 1 and included in the tour", async () => {
+  const stage = STAGES.find((item) => item.id === 1);
+  const memory = stage.memories.find((item) => item.id === "mem-1-flowers");
+  assert.ok(memory);
+  assert.match(memory.caption, /first time someone had ever given me a flower/i);
+  assert.ok(canReach(mapForScene(1), memoryTarget(memory, mapForScene(1)), 64));
+  assert.match(await readFile(new URL(`../public${memory.imageUrl}`, import.meta.url), "utf8"), /<svg/);
+  const { MONTH_ONE_TOUR } = await import(asModule(await readFile(new URL("../src/data/tours.js", import.meta.url), "utf8")));
+  assert.ok(MONTH_ONE_TOUR.some((stop) => stop.memoryId === memory.id));
+});
+
 test("hub BOS Coffee has a reachable memory beside both pasalubong shops", () => {
   const map = mapForScene("hub");
   const coffee = map.props.find((prop) => prop.type === "bos-coffee");

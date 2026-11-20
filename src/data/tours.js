@@ -1,6 +1,7 @@
 // Month 1 tour order. Coordinates are Tom's waiting spots.
 export const MONTH_ONE_TOUR = [
   { memoryId: "mem-1-1", tom: { x: 230, y: 300 } },
+  { memoryId: "mem-1-flowers", tom: { x: 320, y: 300 } },
   { memoryId: "mem-1-3", tom: { x: 400, y: 390 } },
   { memoryId: "mem-1-4", tom: { x: 600, y: 220 } },
   { memoryId: "mem-1-2", tom: { x: 780, y: 300 } },

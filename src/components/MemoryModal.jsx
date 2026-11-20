@@ -61,10 +61,7 @@ export default function MemoryModal({ memory }) {
         </div>
 
         <div className="px-1 pt-4">
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#a06b86]">
-            {memory.date} · {memory.location}
-          </p>
-          <h2 className="mt-1 font-serif text-2xl italic text-[#372a3d]">
+          <h2 className="font-serif text-2xl italic text-[#372a3d]">
             {memory.title}
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-[#5d4d63]">

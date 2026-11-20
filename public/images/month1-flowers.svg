@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title">
+  <title id="title">Purple tulips and one large round blue flower, a gift for each other</title>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#fbe5e6"/><stop offset="1" stop-color="#dfc4d9"/></linearGradient>
+    <g id="round-flower"><circle r="31"/><circle r="10" fill="#f3c879"/></g>
+    <g id="tulip"><path d="M-25 -32 Q-15 -24 -9 -13 L0 -39 L9 -13 Q15 -24 25 -32 L23 -5 Q20 19 0 23 Q-20 19 -23 -5Z"/><path d="M0 -39 Q-7 -10 0 21 M-25 -32 Q-14 -2 0 21 M25 -32 Q14 -2 0 21" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="2"/></g>
+    <g id="stems"><path d="M0 105 Q-15 5 -78 -75 M0 105 Q0 -4 0 -115 M0 105 Q22 -5 78 -78 M0 105 Q-40 6 -48 -125 M0 105 Q45 3 48 -128" fill="none" stroke="#648064" stroke-width="7"/><path d="M-25 37 Q-102 10 -85 -25 Q-37 -24 -25 37M24 27 Q99 0 81 -35 Q37 -28 24 27" fill="#8aaa80"/></g>
+    <g id="wrapper"><path d="M-100 -2 Q0 25 100 -2 L35 146 Q0 160 -35 146Z" fill="#f8ecdc" stroke="#dfc4b7" stroke-width="4"/><path d="M-100 -2 L0 86 L100 -2 M-35 146 L0 86 L35 146" fill="none" stroke="#dfc4b7" stroke-width="4"/><path d="M-4 93 C-58 55 -67 111 -4 101 C-10 141 10 141 4 101 C67 111 58 55 4 93Z" fill="#c97889"/></g>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <circle cx="130" cy="102" r="65" fill="#fff6ee" opacity=".35"/><circle cx="680" cy="490" r="90" fill="#fff6ee" opacity=".25"/>
+  <path d="M400 223 C351 180 301 241 400 307 C499 241 449 180 400 223Z" fill="#cf829a" opacity=".65"/>
+  <g transform="translate(245 343) rotate(-13)">
+    <use href="#stems"/>
+    <use href="#tulip" x="-78" y="-78" fill="#a67bd1"/><use href="#tulip" x="-48" y="-128" fill="#8757b6"/><use href="#tulip" x="0" y="-115" fill="#c2a1e5"/><use href="#tulip" x="48" y="-130" fill="#a67bd1"/><use href="#tulip" x="78" y="-80" fill="#c2a1e5"/>
+    <use href="#wrapper"/>
+  </g>
+  <g transform="translate(555 343) rotate(13)">
+    <path d="M0 105 L0 -95" fill="none" stroke="#648064" stroke-width="7"/>
+    <path d="M-3 32 Q-78 12 -70 -24 Q-30 -22 -3 32 M3 15 Q80 -8 68 -40 Q30 -31 3 15" fill="#8aaa80"/>
+    <use href="#round-flower" transform="translate(0 -120) scale(2.1)" fill="#6a9ed7"/>
+    <use href="#wrapper"/>
+  </g>
+  <g fill="#fff8ef" opacity=".75"><circle cx="92" cy="292" r="4"/><circle cx="711" cy="195" r="5"/><circle cx="406" cy="105" r="4"/><circle cx="395" cy="442" r="5"/></g>
+</svg>
