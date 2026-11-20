@@ -4,7 +4,7 @@ export const HUB_COFFEE_MEMORY = {
   title: "Coffee at BOS",
   date: "Before our first flight",
   location: "BOS Coffee · Airport",
-  caption: "A quick coffee before the flight, and another small moment I keep.",
+caption: "Coffee sa airport bago tayo pumunta sa Australia, na sabi mo hindi ka nagkakape ng hot kaso hot coffee lang ang available. Sadbeans :(",
   imageUrl: "/images/hub-bos-coffee.jpg",
   landmark: "bos-coffee",
   x: 1175,

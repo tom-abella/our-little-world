@@ -13,11 +13,11 @@ export const STAGES = [
     memories: [
       {
         id: "mem-0-1",
-        title: "Roaming Greenfield",
+        title: "Walking in Greenfield",
         date: "Before November 2026",
         location: "Greenfield, Pasay",
         caption:
-          "No plan, just a street and time. We walked the same three blocks twice and pretended it was a new route. I would have circled the whole city if it meant the conversation didn't have to end.",
+          "Dumating sa point na gusto mo na ako tumigil at patigilin na napunta sa dun pala mag sisimula ang lahat. I know, at sa paglalakad natin din kita mas lalong nakilala.",
         imageUrl: "/images/prologue-photo1.jpg",
         x: 480,
         y: 310,
@@ -28,7 +28,7 @@ export const STAGES = [
         date: "Before November 2026",
         location: "Starbucks near your condo",
         caption:
-          "If i remember correctly, umuulan to and ito yung time na bumili ako ng gift para sa mga pamangkin ko and yung gift kong flower na para sayo. Ito rin yung time na nauna ka nang umorder tapos kabisado mo na yung go-to coffee ko sa starbucks and makes me kilig haha.",
+          "There are so many coffee dates ang napuntahan natin and it became a part na ng routine natin na after kumain nag kakape.",
         imageUrl: "/images/prologue-photo2.jpg",
         landmark: "cafe",
         x: 190,
@@ -40,7 +40,7 @@ export const STAGES = [
         date: "Before November 2026",
         location: "The cinema",
         caption:
-          "Triny na kita ayain before manood ng cinema, kaso it turns out hindi ka pala nanonood ng mga fictions like marvels spiderman. I'm happy na nakahanap tayo ng genre na gusto nating dalawa and thats a Horror.",
+          "Madalas horror movies ang pinapanood natin kasi hindi ka pala mahilig manood ng marvels but we both enjoyed the experience kasi madalas kang nagugulat at natatakot hahaha.",
         imageUrl: "/images/prologue-photo3.jpg",
         landmark: "cinema",
         x: 380,
@@ -64,7 +64,7 @@ export const STAGES = [
         date: "Before November 2026",
         location: "Greenfield park path, Pasay",
         caption:
-          "I was happy na na meet mo na si mark na aking bestfriend. Happy rin ako kasi tingin ko naman naging comfortable sya sayo and sayo rin sakanya. ",
+          "Happy ako na nag meet na kayo ni mark at dumating sa point na napaopen up na sya satin na para bang ang tagal tagal nyo na magkakilala hahaha. ",
         imageUrl: "/images/prologue-photo6.jpg",
         landmark: "sidewalk",
         x: 620,
@@ -84,11 +84,11 @@ export const STAGES = [
       },
       {
         id: "mem-0-8",
-        title: "First Holding Hand",
+        title: "Holding Hands after away?",
         date: "Before November 2026",
         location: "After long walk in greenfield",
         caption:
-          "Ito yung time na i thought it will be the last to see you and to talk to you kasi i do something that hurt you kaya i decided to hold your hands, kulitin ka, and i told you na i will be here for you. I will never leave you. I will always be here for you. Long story short, we ended up okay ulit hehe.",
+          "Ito yung time na sinulit ko na talaga na kasama kita at ayaw ko na bitawan yung kamay mo kasi natatakot ako na baka last na yun. But after this, palagi na tayong may ganitong moments hahaha.",
         imageUrl: "/images/prologue-photo8.jpg",
         x: 600,
         y: 460,

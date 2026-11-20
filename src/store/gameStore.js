@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { STAGES, isStageUnlocked, formatUnlockDate } from "@/data/stages";
 
 export const useGame = create((set, get) => ({
   started: false,
@@ -44,7 +45,37 @@ export const useGame = create((set, get) => ({
     set({ prologueStep, prologuePhase }),
   queueContinuePrompt: () => set({ pendingContinuePrompt: true }),
   dismissMonthOnePrompt: () => set({ monthOnePrompt: false }),
-  goToMonthOne: () =>
+  goToMonthOne: () => {
+    const monthOne = STAGES.find((stage) => stage.id === 1);
+    if (!monthOne || !isStageUnlocked(monthOne)) {
+      // Month 1 is locked: stop the guided tour and let Micah roam.
+      // storyMode stays true so the guided month starts when the gate opens.
+      set({
+        monthOnePrompt: false,
+        pendingContinuePrompt: false,
+        monthOneInvited: false,
+        scene: "hub",
+        tourStage: "done",
+        dialogue: {
+          speaker: "Tom",
+          lines: [
+            {
+              speaker: "Tom",
+              text: `Month 1 isn't open yet, babe. It opens on ${monthOne ? formatUnlockDate(monthOne.unlockDate) : "a later date"}.`,
+            },
+            {
+              speaker: "Micah",
+              text: "Okay. Let's just roam around for now.",
+            },
+          ],
+          index: 0,
+          after: null,
+          afterMemory: null,
+        },
+      });
+      return;
+    }
+
     set({
       monthOnePrompt: false,
       pendingContinuePrompt: false,
@@ -65,7 +96,8 @@ export const useGame = create((set, get) => ({
         after: null,
         afterMemory: null,
       },
-    }),
+    });
+  },
   startMonthOneTour: () => set({ monthOneStep: 0, monthOnePhase: "lead" }),
   setMonthOneProgress: (monthOneStep, monthOnePhase) =>
     set({ monthOneStep, monthOnePhase }),

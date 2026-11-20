@@ -165,10 +165,11 @@ const PROLOGUE_PATHS = [
 ];
 const PROLOGUE_TOUR_LINES = {
   "mem-0-1": [
+    { speaker: "Tom", text: "Walking in greenfield." },
     { speaker: "Tom", text: "One of my memorable moments with you babe." },
     { speaker: "Micah", text: "Me too haha." },
     { speaker: "Tom", text: "From time na gusto mo na ako tumigil at patigilin na napunta sa dun pala mag sisimula ang lahat." },
-    { speaker: "Micah", text: "I know. At sa paglalakad natin din kita mas lalong nakilala." },
+    { speaker: "Micah", text: "I know, at sa paglalakad natin din kita mas lalong nakilala." },
     { speaker: "Tom", text: "Me too babe." },
   ],
   "mem-0-2": [
@@ -204,6 +205,7 @@ const PROLOGUE_TOUR_LINES = {
     { speaker: "Micah", text: "Aba dapat lang!" },
   ],
   "mem-0-8": [
+    { speaker: "Tom", text: "Holding Hands after away?" },
     { speaker: "Tom", text: "Actually hindi ito yung first time we hold hands but ito yung pinakamatagal haha" },
     { speaker: "Tom", text: "But ito yung time na akala ko mawawala na kita." },
     { speaker: "Tom", text: "Kaya pinaramdam ko nalang sayo na ayaw kita pakawalan hehe." },
@@ -682,8 +684,14 @@ export default function GameCanvas() {
       g.tourStage === "at-prologue" &&
       useGame.getState().prologuePhase === "done"
     ) {
-      useGame.getState().setTourStage("lead-month-one");
-      g.tourStage = "lead-month-one";
+      const monthOne = STAGES.find((stage) => stage.id === 1);
+      if (monthOne && isStageUnlocked(monthOne)) {
+        useGame.getState().setTourStage("lead-month-one");
+        g.tourStage = "lead-month-one";
+      } else {
+        useGame.getState().setTourStage("done");
+        g.tourStage = "done";
+      }
     }
     g.tomPath = TOM_PATHS[g.tourStage]
       ? TOM_PATHS[g.tourStage].map((point) => ({ ...point }))
