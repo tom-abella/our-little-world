@@ -111,8 +111,8 @@ export const STAGES = [
         caption:
           "I gave you purple tulips, and you gave me a blue flower too. It was the first time someone had ever given me a flower, and it meant so much to me that it was you. Thank you, babe, for making me feel so loved. I will always remember this little exchange of ours.",
         imageUrl: "/images/month1-flowers.svg",
-        x: 320,
-        y: 300,
+        x: 1040,
+        y: 490,
       },
       {
         id: "mem-1-1",

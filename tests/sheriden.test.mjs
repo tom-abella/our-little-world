@@ -91,10 +91,14 @@ test("flower exchange is reachable in Month 1 and included in the tour", async (
   const memory = stage.memories.find((item) => item.id === "mem-1-flowers");
   assert.ok(memory);
   assert.match(memory.caption, /first time someone had ever given me a flower/i);
+  assert.ok(Math.hypot(memory.x - mapForScene(1).sheridenEntrance.x, memory.y - mapForScene(1).sheridenEntrance.y) < 150, "flowers are near Sheriden Tower");
   assert.ok(canReach(mapForScene(1), memoryTarget(memory, mapForScene(1)), 64));
   assert.match(await readFile(new URL(`../public${memory.imageUrl}`, import.meta.url), "utf8"), /<svg/);
   const { MONTH_ONE_TOUR } = await import(asModule(await readFile(new URL("../src/data/tours.js", import.meta.url), "utf8")));
-  assert.ok(MONTH_ONE_TOUR.some((stop) => stop.memoryId === memory.id));
+  const stop = MONTH_ONE_TOUR.find((item) => item.memoryId === memory.id);
+  assert.ok(stop);
+  assert.ok(canReach(mapForScene(1), stop.tom, 10), "Tom's flower stop is walkable");
+  assert.ok(Math.hypot(stop.tom.x - memory.x, stop.tom.y - memory.y) < 64);
 });
 
 test("hub BOS Coffee has a reachable memory beside both pasalubong shops", () => {
