@@ -99,8 +99,6 @@ export const STAGES = [
     id: 1,
     title: "Month 1: Where It Started",
     unlockDate: "2026-12-02",
-    // Opened early for now. Remove this line to restore the Dec 2 monthsary lock.
-    unlockedOverride: true,
     theme: "baguio",
     memories: [
       {
