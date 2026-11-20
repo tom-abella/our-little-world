@@ -165,39 +165,50 @@ const PROLOGUE_PATHS = [
 ];
 const PROLOGUE_TOUR_LINES = {
   "mem-0-1": [
-    { speaker: "Tom", text: "This is where our Greenfield walks started." },
-    { speaker: "Micah", text: "We walked the same blocks twice." },
-    { speaker: "Tom", text: "I'd have walked them a third time." },
+    { speaker: "Tom", text: "One of my memorable moments with you babe." },
+    { speaker: "Micah", text: "Me too haha." },
+    { speaker: "Tom", text: "From time na gusto mo na ako tumigil at patigilin na napunta sa dun pala mag sisimula ang lahat." },
+    { speaker: "Micah", text: "I know. At sa paglalakad natin din kita mas lalong nakilala." },
+    { speaker: "Tom", text: "Me too babe." },
   ],
   "mem-0-2": [
-    { speaker: "Tom", text: "Our coffee date. You already knew my order." },
-    { speaker: "Micah", text: "You always get the same thing." },
-    { speaker: "Tom", text: "And you still make it special." },
+    { speaker: "Tom", text: "Our coffee dates, kabisado mo na agad yung usual kong order sa Starbucks" },
+    { speaker: "Micah", text: "Syempre ako pa." },
+    { speaker: "Tom", text: "Pati yung customization eh aa." },
+    { speaker: "Micah", text: "Love you babe." },
+    { speaker: "Tom", text: "I love you more my babe." },
   ],
   "mem-0-3": [
-    { speaker: "Tom", text: "Our first cinema date." },
-    { speaker: "Micah", text: "You survived a horror movie." },
-    { speaker: "Tom", text: "Only because you were holding my arm." },
+    { speaker: "Tom", text: "Our cinema dates." },
+    { speaker: "Micah", text: "Mostly horror kasi i dont watch marvel movies haha." },
+    { speaker: "Tom", text: "I know, atleast meron tayong genre na both gustong panoorin." },
+    { speaker: "Tom", text: "Kahit ano pa yan basta kasama ikaw hehe." },
   ],
   "mem-0-4": [
-    { speaker: "Tom", text: "Samgyupsal at your favourite place." },
-    { speaker: "Micah", text: "We called Dad." },
-    { speaker: "Tom", text: "He was happy for us. I was too." },
+    { speaker: "Tom", text: "Samgyupsal at Soban your favourite place." },
+    { speaker: "Micah", text: "Inasar pa natin si Dad." },
+    { speaker: "Tom", text: "Gulat na gulat sya e hahaha." },
   ],
   "mem-0-6": [
-    { speaker: "Tom", text: "And this is where you met Mark." },
-    { speaker: "Micah", text: "I was so nervous." },
-    { speaker: "Tom", text: "He liked you. I knew he would." },
+    { speaker: "Tom", text: "This time na meet mo na si Mark" },
+    { speaker: "Micah", text: "Your best friend." },
+    { speaker: "Tom", text: "Happy ako na naging comfortable kayo sa isa't-isa" },
+    { speaker: "Micah", text: "Happy rin ako na na meet ko si Mark hehe." },
   ],
   "mem-0-7": [
     { speaker: "Tom", text: "Movie nights at the Airbnb." },
-    { speaker: "Micah", text: "We never finished a single movie." },
-    { speaker: "Tom", text: "I was too busy listening to you." },
+    { speaker: "Micah", text: "Movies or documentaries na mostly ako lang nanonood." },
+    { speaker: "Tom", text: "Nanonood kaya ako and my favourite is watching you." },
+    { speaker: "Micah", text: "Ang landi mo talaga babe." },
+    { speaker: "Tom", text: "Syempre sayo lang." },
+    { speaker: "Micah", text: "Aba dapat lang!" },
   ],
   "mem-0-8": [
-    { speaker: "Tom", text: "Here is where I held your hand." },
-    { speaker: "Micah", text: "I thought I was going to lose you." },
-    { speaker: "Tom", text: "You won't. I'm not going anywhere." },
+    { speaker: "Tom", text: "Actually hindi ito yung first time we hold hands but ito yung pinakamatagal haha" },
+    { speaker: "Tom", text: "But ito yung time na akala ko mawawala na kita." },
+    { speaker: "Tom", text: "Kaya pinaramdam ko nalang sayo na ayaw kita pakawalan hehe." },
+    { speaker: "Micah", text: "I love you babe." },
+    { speaker: "Tom", text: "I love you more my babe." },
   ],
 };
 
@@ -396,10 +407,10 @@ function getTargets(map, scene, st, g) {
     : monthOneTour
       ? st.monthOnePhase === "at" && monthOneStop?.memoryId
         ? [
-            MONTH_ONE_MEMORIES.find(
-              (memory) => memory.id === monthOneStop.memoryId,
-            ),
-          ].filter(Boolean)
+          MONTH_ONE_MEMORIES.find(
+            (memory) => memory.id === monthOneStop.memoryId,
+          ),
+        ].filter(Boolean)
         : []
       : map.memories || stage?.memories || [];
   const list = memories.map((memory) => memoryTarget(memory, map));
@@ -812,11 +823,11 @@ export default function GameCanvas() {
         !st.started ||
         Boolean(
           st.dialogue ||
-            st.modal ||
-            st.choosingSheriden ||
-            st.storyModePrompt ||
-            st.monthOneClosing ||
-            st.monthOnePrompt,
+          st.modal ||
+          st.choosingSheriden ||
+          st.storyModePrompt ||
+          st.monthOneClosing ||
+          st.monthOnePrompt,
         );
       const sceneNow = sceneRef.current;
       const map = mapForScene(sceneNow);
@@ -1181,10 +1192,10 @@ export default function GameCanvas() {
         : monthOneTourActive
           ? st.monthOnePhase === "at" && monthOneStop?.memoryId
             ? [
-                MONTH_ONE_MEMORIES.find(
-                  (memory) => memory.id === monthOneStop.memoryId,
-                ),
-              ].filter(Boolean)
+              MONTH_ONE_MEMORIES.find(
+                (memory) => memory.id === monthOneStop.memoryId,
+              ),
+            ].filter(Boolean)
             : []
           : map.memories || stage?.memories || [];
       for (const memory of visibleMemories) {
