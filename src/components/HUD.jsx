@@ -87,13 +87,26 @@ export default function HUD() {
                         : "Remember the roof-deck memory"
                     : "Collect the memories, then head home";
 
+  useEffect(() => {
+    if (!musicOn) {
+      stopMusic();
+      return;
+    }
+
+    startMusic();
+    const unlock = () => startMusic();
+    window.addEventListener("pointerdown", unlock, { once: true });
+    window.addEventListener("keydown", unlock, { once: true });
+
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
+  }, [musicOn]);
+
   useEffect(() => () => stopMusic(), []);
 
-  const onMusic = () => {
-    if (musicOn) stopMusic();
-    else startMusic();
-    toggleMusic();
-  };
+  const onMusic = toggleMusic;
 
   return (
     <div className="flex items-center justify-between gap-3">

@@ -2,12 +2,14 @@
 
 import { useGame } from "@/store/gameStore";
 import { unlockSfx } from "@/lib/sfx";
+import { startMusic } from "@/lib/music";
 
 export default function StartScreen() {
   const startGame = useGame((s) => s.startGame);
 
   const handleStart = () => {
     unlockSfx();
+    startMusic();
     startGame();
   };
 

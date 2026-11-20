@@ -17,7 +17,7 @@ export const useGame = create((set, get) => ({
   monthOnePhase: "idle",
   monthOneClosing: false,
   pendingMonthOneClosing: false,
-  musicOn: false,
+  musicOn: true,
   dialogue: null,
   modal: null,
   choosingSheriden: false,

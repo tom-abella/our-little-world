@@ -56,23 +56,45 @@ function chord(freqs, at, dur, vol) {
   for (const freq of freqs) note(freq, at, dur, "sine", vol, 0.7);
 }
 
+function playStep() {
+  if (ctx.state !== "running") return;
+  const at = ctx.currentTime + 0.03;
+  const bar = Math.floor(step / STEPS_PER_BAR) % CHORDS.length;
+  bell(MELODY[step % MELODY.length], at, 1.0, 0.028);
+  if (step % STEPS_PER_BAR === 0) {
+    const barSeconds = (STEP_MS * STEPS_PER_BAR) / 1000;
+    chord(CHORDS[bar], at, barSeconds * 1.05, 0.012);
+    note(BASS[bar], at, barSeconds * 1.05, "sine", 0.018, 0.5);
+  }
+  step++;
+}
+
+function begin() {
+  if (timer) return;
+  timer = setInterval(playStep, STEP_MS);
+}
+
 export function startMusic() {
   if (typeof window === "undefined") return;
   if (!ctx) setup();
   if (!ctx) return;
-  if (ctx.state === "suspended") ctx.resume();
   if (timer) return;
-  timer = setInterval(() => {
-    const at = ctx.currentTime + 0.03;
-    const bar = Math.floor(step / STEPS_PER_BAR) % CHORDS.length;
-    bell(MELODY[step % MELODY.length], at, 1.0, 0.028);
-    if (step % STEPS_PER_BAR === 0) {
-      const barSeconds = (STEP_MS * STEPS_PER_BAR) / 1000;
-      chord(CHORDS[bar], at, barSeconds * 1.05, 0.012);
-      note(BASS[bar], at, barSeconds * 1.05, "sine", 0.018, 0.5);
-    }
-    step++;
-  }, STEP_MS);
+
+  if (ctx.state === "running") {
+    begin();
+    return;
+  }
+
+  // Autoplay policies keep the context suspended until the first gesture.
+  // Try to resume now; if the browser blocks it, the next call starts it.
+  const resumed = ctx.resume();
+  if (resumed?.then) {
+    resumed
+      .then(() => {
+        if (ctx.state === "running") begin();
+      })
+      .catch(() => {});
+  }
 }
 
 export function stopMusic() {
