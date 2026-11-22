@@ -656,6 +656,33 @@ function drawGreenfieldProps(ctx, p) {
     ctx.beginPath();
     ctx.arc(p.x + p.w - 42.5, p.y + 6, 4, 0, Math.PI * 2);
     ctx.fill();
+  } else if (p.type === "phone") {
+    ctx.fillStyle = "rgba(0,0,0,0.18)";
+    ctx.beginPath();
+    ctx.ellipse(p.x + p.w / 2, p.y + p.h + 3, p.w * 0.6, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#2c2735";
+    roundRect(ctx, p.x, p.y, p.w, p.h, 6);
+    ctx.fill();
+    ctx.fillStyle = "#8fd9d2";
+    roundRect(ctx, p.x + 3, p.y + 4, p.w - 6, p.h - 8, 4);
+    ctx.fill();
+
+    ctx.fillStyle = "#fdf8ff";
+    roundRect(ctx, p.x + 6, p.y + 9, p.w - 12, 6, 2);
+    ctx.fill();
+    ctx.fillStyle = "#ffd9e8";
+    roundRect(ctx, p.x + 9, p.y + 18, p.w - 12, 6, 2);
+    ctx.fill();
+    ctx.fillStyle = "#fdf8ff";
+    roundRect(ctx, p.x + 6, p.y + 27, p.w - 15, 5, 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#ff8fb6";
+    ctx.beginPath();
+    ctx.arc(p.x + p.w - 5, p.y + 6, 2, 0, Math.PI * 2);
+    ctx.fill();
   } else if (p.type === "cafe") {
     ctx.fillStyle = "rgba(0,0,0,0.15)";
     ctx.fillRect(p.x + 6, p.y + 8, p.w, p.h);

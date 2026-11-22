@@ -5,7 +5,7 @@ import { useGame } from "@/store/gameStore";
 import { STAGES, isStageUnlocked, formatUnlockDate } from "@/data/stages";
 import { WORLD_W, WORLD_H, mapForScene } from "./maps";
 import { memoryTarget, targetDistance } from "./memoryTargets";
-import { MONTH_ONE_TOUR } from "@/data/tours";
+import { MONTH_ONE_TOUR, MONTH_ONE_STEP } from "@/data/tours";
 import {
   consumeInteract,
   clearKeys,
@@ -154,15 +154,16 @@ const SHERIDEN_EXIT_PATHS = {
 
 const PROLOGUE_MEMORIES = STAGES.find((stage) => stage.id === 0)?.memories ?? [];
 const PROLOGUE_ENTRY = { x: 480, y: 430 };
-const PROLOGUE_PATHS = [
-  [{ x: 480, y: 360 }],
-  [{ x: 190, y: 360 }, { x: 190, y: 220 }],
-  [{ x: 490, y: 220 }],
-  [{ x: 490, y: 450 }, { x: 300, y: 450 }],
-  [{ x: 610, y: 410 }],
-  [{ x: 610, y: 300 }, { x: 800, y: 220 }],
-  [{ x: 660, y: 300 }, { x: 660, y: 460 }],
-];
+const PROLOGUE_PATHS = {
+  "mem-0-1": [{ x: 480, y: 360 }],
+  "mem-0-2": [{ x: 190, y: 360 }, { x: 190, y: 220 }],
+  "mem-0-3": [{ x: 490, y: 220 }],
+  "mem-0-4": [{ x: 490, y: 450 }, { x: 300, y: 450 }],
+  "mem-0-5": [{ x: 380, y: 450 }, { x: 450, y: 480 }],
+  "mem-0-6": [{ x: 610, y: 410 }],
+  "mem-0-7": [{ x: 610, y: 300 }, { x: 800, y: 220 }],
+  "mem-0-8": [{ x: 660, y: 300 }, { x: 660, y: 460 }],
+};
 const PROLOGUE_TOUR_LINES = {
   "mem-0-1": [
     { speaker: "Tom", text: "Walking in greenfield." },
@@ -189,6 +190,14 @@ const PROLOGUE_TOUR_LINES = {
     { speaker: "Tom", text: "Samgyupsal at Soban your favourite place." },
     { speaker: "Micah", text: "Inasar pa natin si Dad." },
     { speaker: "Tom", text: "Gulat na gulat sya e hahaha." },
+  ],
+  "mem-0-5": [
+    { speaker: "Tom", text: "Before we were official, I asked your bestfriend for advice." },
+    { speaker: "Micah", text: "You did? What did you ask her?" },
+    { speaker: "Tom", text: "What you liked, what made you laugh, how not to mess things up." },
+    { speaker: "Micah", text: "And what did she say?" },
+    { speaker: "Tom", text: "To stop overthinking and just be myself." },
+    { speaker: "Micah", text: "Best advice ever, babe." },
   ],
   "mem-0-6": [
     { speaker: "Tom", text: "This time na meet mo na si Mark" },
@@ -237,8 +246,9 @@ const MONTH_ONE_PATHS = [
   [{ x: 780, y: 300 }],
   [{ x: 980, y: 300 }],
   [{ x: 880, y: 300 }, { x: 880, y: 480 }, { x: 650, y: 500 }, { x: 450, y: 500 }, { x: 370, y: 490 }],
-  [{ x: 880, y: 230 }, { x: 880, y: 485 }, { x: 1165, y: 480 }],
-  [],
+  [], // flowers: reached by the automatic sundo ride
+  [{ x: 1165, y: 480 }], // lobby entrance
+  [], // roof: entered from the lobby exit
   [{ x: 650, y: 480 }, { x: 650, y: 380 }],
 ];
 const MONTH_ONE_TOUR_LINES = {
@@ -614,12 +624,12 @@ function interactWith(target, st, g) {
     }
   } else if (target.kind === "exit") {
     if (st.scene === "sheriden-lobby" && st.monthOnePhase !== "done") {
-      st.setMonthOneProgress(7, "at");
+      st.setMonthOneProgress(MONTH_ONE_STEP.roof, "at");
       st.setScene("sheriden-roof");
       return;
     }
     if (st.scene === "sheriden-roof" && st.monthOnePhase !== "done") {
-      st.setMonthOneProgress(8, "lead");
+      st.setMonthOneProgress(MONTH_ONE_STEP.final, "lead");
     }
     st.setScene(target.destination);
   }
@@ -710,8 +720,9 @@ export default function GameCanvas() {
       if (prologue.prologuePhase === "lead") {
         g.tom = { ...PROLOGUE_ENTRY, dir: "up", moving: false };
       } else if (prologue.prologuePhase === "at") {
+        const memory = PROLOGUE_MEMORIES[prologue.prologueStep];
         const stop =
-          PROLOGUE_PATHS[prologue.prologueStep]?.at(-1) || PROLOGUE_ENTRY;
+          PROLOGUE_PATHS[memory?.id]?.at(-1) || PROLOGUE_ENTRY;
         g.tom = { x: stop.x, y: stop.y, dir: "down", moving: false };
       } else {
         g.tom = null;
@@ -817,6 +828,7 @@ export default function GameCanvas() {
         st.started &&
         !st.choosingSheriden &&
         !st.storyModePrompt &&
+        !st.storyStartPrompt &&
         !st.monthOneClosing &&
         !g.autoRide &&
         !st.monthOnePrompt
@@ -834,6 +846,7 @@ export default function GameCanvas() {
           st.modal ||
           st.choosingSheriden ||
           st.storyModePrompt ||
+          st.storyStartPrompt ||
           st.monthOneClosing ||
           st.monthOnePrompt,
         );
@@ -959,7 +972,8 @@ export default function GameCanvas() {
             g.prologuePath = null;
             g.prologuePathIndex = 0;
             if (st.prologuePhase === "lead") {
-              g.prologuePath = (PROLOGUE_PATHS[st.prologueStep] || []).map(
+              const memory = PROLOGUE_MEMORIES[st.prologueStep];
+              g.prologuePath = (PROLOGUE_PATHS[memory?.id] || []).map(
                 (point) => ({ ...point }),
               );
             }
@@ -1014,12 +1028,15 @@ export default function GameCanvas() {
             g.autoRide = null;
             g.sundoRideReady = false;
             if (st.monthOnePhase === "lead") {
-              if (st.storyMode && st.monthOneStep === 6) {
-                // First sundo -> Sheriden Towers: a short automatic ride.
+              if (
+                st.storyMode &&
+                st.monthOneStep === MONTH_ONE_STEP.flowers
+              ) {
+                // First sundo -> the flowers/Sheriden area: a short automatic ride.
                 g.autoRide = {
                   path: SUNDO_RIDE_PATH.map((point) => ({ ...point })),
                   index: 0,
-                  step: 6,
+                  step: MONTH_ONE_STEP.flowers,
                 };
                 g.riding = true;
                 g.moving = false;
@@ -1028,7 +1045,10 @@ export default function GameCanvas() {
                 g.dir = "left";
                 g.trail = [];
               } else {
-                if (st.storyMode && st.monthOneStep === 5) {
+                if (
+                  st.storyMode &&
+                  st.monthOneStep === MONTH_ONE_STEP.sundo
+                ) {
                   // Before the first sundo, go to Tom's house for his motorcycle.
                   g.riding = false;
                   g.bike = map.bike ? { ...map.bike } : g.bike;
@@ -1062,7 +1082,10 @@ export default function GameCanvas() {
               g.tom.moving = false;
               if (g.monthOnePathIndex >= g.monthOnePath.length) {
                 g.monthOnePath = null;
-                if (st.storyMode && st.monthOneStep === 5) {
+                if (
+                  st.storyMode &&
+                  st.monthOneStep === MONTH_ONE_STEP.sundo
+                ) {
                   g.sundoRideReady = true;
                 } else {
                   useGame
@@ -1096,7 +1119,7 @@ export default function GameCanvas() {
           g.autoRide = {
             path: HOUSE_RIDE_PATH.map((point) => ({ ...point })),
             index: 0,
-            step: 5,
+            step: MONTH_ONE_STEP.sundo,
           };
           g.riding = true;
           g.moving = false;
@@ -1123,6 +1146,21 @@ export default function GameCanvas() {
               g.tom.moving = false;
               if (g.sheridenPathIndex >= g.sheridenPath.length) {
                 g.sheridenPath = null;
+                // Once the room memory is read, Tom heads for the exit and
+                // the story continues automatically so it cannot stall here.
+                if (st.sheridenMemoryDone && st.monthOnePhase !== "done") {
+                  if (sceneNow === "sheriden-lobby") {
+                    useGame
+                      .getState()
+                      .setMonthOneProgress(MONTH_ONE_STEP.roof, "at");
+                    useGame.getState().setScene("sheriden-roof");
+                  } else if (sceneNow === "sheriden-roof") {
+                    useGame
+                      .getState()
+                      .setMonthOneProgress(MONTH_ONE_STEP.final, "lead");
+                    useGame.getState().setScene(1);
+                  }
+                }
               }
             } else {
               g.tom.x += (dx / dist) * step;
@@ -1299,7 +1337,7 @@ export default function GameCanvas() {
       const sundoRideReady =
         sceneNow === 1 &&
         st.monthOnePhase === "lead" &&
-        st.monthOneStep === 5 &&
+        st.monthOneStep === MONTH_ONE_STEP.sundo &&
         !g.riding;
       if (g.autoRide) {
         drawBubble(ctx, g.x, g.y, now);

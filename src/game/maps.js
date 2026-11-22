@@ -133,6 +133,7 @@ const greenfield = {
   exit: { x: 480, y: 534 },
   props: [
     { type: "sidewalk", x: 520, y: 320, w: 180, h: 60 },
+    { type: "phone", x: 436, y: 430, w: 28, h: 40 },
     { type: "cafe", x: 60, y: 40, w: 260, h: 130 },
     { type: "cinema", x: 380, y: 40, w: 220, h: 130 },
     { type: "apartment", x: 700, y: 40, w: 200, h: 130 },

@@ -11,3 +11,15 @@ export const MONTH_ONE_TOUR = [
   { kind: "sheriden-roof", tom: { x: 1165, y: 480 } },
   { memoryId: "mem-1-6", tom: { x: 650, y: 380 } },
 ];
+
+// Derived step numbers so adding/moving a stop cannot silently break the
+// lobby -> city view -> final memory progression.
+export const MONTH_ONE_STEP = {
+  sundo: MONTH_ONE_TOUR.findIndex((stop) => stop.memoryId === "mem-1-5"),
+  flowers: MONTH_ONE_TOUR.findIndex(
+    (stop) => stop.memoryId === "mem-1-flowers",
+  ),
+  lobby: MONTH_ONE_TOUR.findIndex((stop) => stop.kind === "sheriden-lobby"),
+  roof: MONTH_ONE_TOUR.findIndex((stop) => stop.kind === "sheriden-roof"),
+  final: MONTH_ONE_TOUR.length - 1,
+};

@@ -101,6 +101,21 @@ test("flower exchange is reachable in Month 1 and included in the tour", async (
   assert.ok(Math.hypot(stop.tom.x - memory.x, stop.tom.y - memory.y) < 64);
 });
 
+test("prologue phone advice memory is reachable and has its chat image", async () => {
+  const stage = STAGES.find((item) => item.id === 0);
+  const memory = stage.memories.find((item) => item.id === "mem-0-5");
+  assert.ok(memory);
+  assert.equal(memory.landmark, "phone");
+  const map = mapForScene(0);
+  const target = memoryTarget(memory, map);
+  assert.equal(target.landmark?.type, "phone");
+  assert.ok(canReach(map, target, target.radius));
+  assert.match(
+    await readFile(new URL(`../public${memory.imageUrl}`, import.meta.url), "utf8"),
+    /<svg/,
+  );
+});
+
 test("hub BOS Coffee has a reachable memory beside both pasalubong shops", () => {
   const map = mapForScene("hub");
   const coffee = map.props.find((prop) => prop.type === "bos-coffee");

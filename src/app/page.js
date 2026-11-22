@@ -8,6 +8,7 @@ import StartScreen from "@/components/StartScreen";
 import ContinuePrompt from "@/components/ContinuePrompt";
 import MonthOneClosing from "@/components/MonthOneClosing";
 import StoryModePrompt from "@/components/StoryModePrompt";
+import StoryStartPrompt from "@/components/StoryStartPrompt";
 import SheridenChoice from "@/components/SheridenChoice";
 import TouchControls from "@/components/TouchControls";
 import { useGame } from "@/store/gameStore";
@@ -20,6 +21,7 @@ export default function Home() {
   const monthOnePrompt = useGame((s) => s.monthOnePrompt);
   const monthOneClosing = useGame((s) => s.monthOneClosing);
   const storyModePrompt = useGame((s) => s.storyModePrompt);
+  const storyStartPrompt = useGame((s) => s.storyStartPrompt);
 
   return (
     <main className="no-select relative flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-[#120d1c] px-3 py-4 sm:px-6 sm:py-6">
@@ -50,6 +52,7 @@ export default function Home() {
       {monthOnePrompt && <ContinuePrompt />}
       {monthOneClosing && <MonthOneClosing />}
       {storyModePrompt && <StoryModePrompt />}
+      {storyStartPrompt && <StoryStartPrompt />}
       {!started && <StartScreen />}
     </main>
   );

@@ -59,6 +59,18 @@ export const STAGES = [
         y: 460,
       },
       {
+        id: "mem-0-5",
+        title: "Asking Your Bestfriend for Advice",
+        date: "Before November 2026",
+        location: "Over text",
+        caption:
+          "Before we were official, I messaged your bestfriend to ask for advice. I wanted to know what you liked, what made you laugh, and how not to mess things up. She told me to stop overthinking and just be myself. I still have the screenshots — best advice I ever got.",
+        imageUrl: "/images/prologue-phone.svg",
+        landmark: "phone",
+        x: 450,
+        y: 450,
+      },
+      {
         id: "mem-0-6",
         title: "Meeting Mark for the First Time",
         date: "Before November 2026",
@@ -99,6 +111,8 @@ export const STAGES = [
     id: 1,
     title: "Month 1: Where It Started",
     unlockDate: "2026-12-02",
+    // Opened early for now. Remove this line to restore the Dec 2 monthsary lock.
+    unlockedOverride: true,
     theme: "baguio",
     memories: [
       {

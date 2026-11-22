@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import { useGame } from "@/store/gameStore";
 import { STAGES } from "@/data/stages";
 import { mapForScene } from "@/game/maps";
-import { MONTH_ONE_TOUR } from "@/data/tours";
-import { startMusic, stopMusic } from "@/lib/music";
+import { MONTH_ONE_TOUR, MONTH_ONE_STEP } from "@/data/tours";
+import { startMusic, stopMusic, setMusicTrack } from "@/lib/music";
 
 const TOUR_HINTS = {
   "lead-coffee": "Follow Tom to BOS Coffee",
@@ -65,10 +65,10 @@ export default function HUD() {
           : scene === 0 && prologuePhase === "done"
             ? "Explore the memories, then head home"
             : scene === 1 && monthOnePhase === "lead"
-              ? monthOneStep === 5
+              ? monthOneStep === MONTH_ONE_STEP.sundo
                 ? "Go to Tom's house and ride the motorcycle"
-                : monthOneStep === 6
-                  ? "Riding with Tom to Sheriden Towers"
+                : monthOneStep === MONTH_ONE_STEP.flowers
+                  ? "Riding with Tom to the flowers"
                   : `Follow Tom to ${monthOneTitle}`
               : scene === 1 && monthOnePhase === "at"
                 ? monthOneStop?.kind
@@ -86,6 +86,14 @@ export default function HUD() {
                         ? "Follow Tom back to Month 1"
                         : "Remember the roof-deck memory"
                     : "Collect the memories, then head home";
+
+  useEffect(() => {
+    setMusicTrack(
+      scene === 1 || scene === "sheriden-lobby" || scene === "sheriden-roof"
+        ? "monthOne"
+        : "default",
+    );
+  }, [scene]);
 
   useEffect(() => {
     if (!musicOn) {

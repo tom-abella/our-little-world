@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title">
+  <title id="title">A phone chat asking Micah's bestfriend for advice about her</title>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1">
+      <stop stop-color="#fde7ef"/>
+      <stop offset="1" stop-color="#e4dbf7"/>
+    </linearGradient>
+    <linearGradient id="screen" x2="0" y2="1">
+      <stop stop-color="#fffafd"/>
+      <stop offset="1" stop-color="#f8f1fb"/>
+    </linearGradient>
+    <linearGradient id="frame" x2="1" y2="1">
+      <stop stop-color="#3a3144"/>
+      <stop offset="1" stop-color="#1f1a27"/>
+    </linearGradient>
+    <g id="heart">
+      <path d="M12 21s-7.5-4.6-9.6-9A5.4 5.4 0 0 1 12 6.4 5.4 5.4 0 0 1 21.6 12c-2.1 4.4-9.6 9-9.6 9Z"/>
+    </g>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <circle cx="112" cy="108" r="86" fill="#fff7fb" opacity=".45"/>
+  <circle cx="704" cy="492" r="104" fill="#fff7fb" opacity=".4"/>
+  <circle cx="690" cy="120" r="46" fill="#f9cfe0" opacity=".45"/>
+  <circle cx="118" cy="470" r="34" fill="#d8c9f2" opacity=".45"/>
+
+  <g fill="#df7ea6" opacity=".45">
+    <use href="#heart" transform="translate(86 196) scale(1.5) rotate(-12)"/>
+    <use href="#heart" transform="translate(668 300) scale(1.2) rotate(14)"/>
+    <use href="#heart" transform="translate(142 388) scale(.9) rotate(8)"/>
+  </g>
+
+  <g transform="translate(230 28)">
+    <rect width="340" height="544" rx="42" fill="url(#frame)"/>
+    <rect x="8" y="8" width="324" height="528" rx="35" fill="#0f0b14"/>
+    <rect x="14" y="14" width="312" height="516" rx="30" fill="url(#screen)"/>
+
+    <rect x="120" y="24" width="100" height="16" rx="8" fill="#17121e"/>
+
+    <circle cx="51" cy="76" r="19" fill="#f2bfd4"/>
+    <text x="51" y="82" text-anchor="middle" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="#6b3d56">B</text>
+    <text x="80" y="73" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="#4a3b51">Micah's Bestie</text>
+    <text x="80" y="91" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="12" fill="#9b8aa4">online</text>
+    <circle cx="292" cy="74" r="4" fill="#9b8aa4"/><circle cx="304" cy="74" r="4" fill="#9b8aa4"/><circle cx="316" cy="74" r="4" fill="#9b8aa4"/>
+    <line x1="14" y1="104" x2="326" y2="104" stroke="#eadff0" stroke-width="1"/>
+
+    <g font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14">
+      <rect x="28" y="118" width="190" height="36" rx="16" fill="#efe6f5"/>
+      <text x="44" y="141" fill="#4a3b51">so?? any update 👀</text>
+
+      <rect x="102" y="162" width="210" height="54" rx="16" fill="#f8c6da"/>
+      <text x="118" y="185" fill="#4a2635">i like her.</text>
+      <text x="118" y="204" fill="#4a2635">i don't want to mess this up</text>
+
+      <rect x="28" y="224" width="232" height="54" rx="16" fill="#efe6f5"/>
+      <text x="44" y="247" fill="#4a3b51">then don't overthink it!!</text>
+      <text x="44" y="266" fill="#4a3b51">just be yourself</text>
+
+      <rect x="132" y="286" width="180" height="36" rx="16" fill="#f8c6da"/>
+      <text x="148" y="309" fill="#4a2635">what does she like?</text>
+
+      <rect x="28" y="330" width="252" height="68" rx="16" fill="#efe6f5"/>
+      <text x="44" y="353" fill="#4a3b51">coffee, flowers, and</text>
+      <text x="44" y="372" fill="#4a3b51">someone who listens.</text>
+      <text x="44" y="391" fill="#4a3b51">you're doing great</text>
+
+      <rect x="122" y="406" width="190" height="36" rx="16" fill="#f8c6da"/>
+      <text x="138" y="429" fill="#4a2635">thank you. i owe you one</text>
+
+      <rect x="28" y="450" width="174" height="36" rx="16" fill="#efe6f5"/>
+      <text x="44" y="473" fill="#4a3b51">just make her happy!!</text>
+    </g>
+
+    <g>
+      <rect x="26" y="498" width="288" height="28" rx="14" fill="#f0e7f5" stroke="#e5d8ee"/>
+      <text x="42" y="517" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="12" fill="#a99ab1">Message...</text>
+      <circle cx="298" cy="512" r="10" fill="#e78fb4"/>
+      <path d="M294 512 L302 512 M299 508 L303 512 L299 516" fill="none" stroke="#fff7fb" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <g fill="#fff8fc" opacity=".9">
+    <circle cx="196" cy="126" r="4"/>
+    <circle cx="634" cy="214" r="5"/>
+    <circle cx="580" cy="86" r="3"/>
+    <circle cx="214" cy="530" r="4"/>
+  </g>
+</svg>

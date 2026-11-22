@@ -4,6 +4,7 @@ import { STAGES, isStageUnlocked, formatUnlockDate } from "@/data/stages";
 export const useGame = create((set, get) => ({
   started: false,
   storyModePrompt: false,
+  storyStartPrompt: false,
   storyMode: true,
   scene: "hub",
   recruited: false,
@@ -23,11 +24,71 @@ export const useGame = create((set, get) => ({
   choosingSheriden: false,
   sheridenMemoryDone: false,
 
-  startGame: () => set({ started: true, storyModePrompt: true }),
-  startStoryMode: () => set({ storyModePrompt: false, storyMode: true }),
+  startGame: () => set({ started: true, storyModePrompt: true, storyStartPrompt: false }),
+  startStoryMode: () => {
+    const monthOne = STAGES.find((stage) => stage.id === 1);
+    const monthOneOpen = Boolean(monthOne && isStageUnlocked(monthOne));
+    set({
+      storyModePrompt: false,
+      storyMode: true,
+      storyStartPrompt: monthOneOpen,
+    });
+  },
+  startStoryFromBeginning: () =>
+    set({
+      storyStartPrompt: false,
+      storyMode: true,
+      scene: "hub",
+      recruited: false,
+      tourStage: "meet",
+      prologueStep: 0,
+      prologuePhase: "idle",
+      monthOneStep: 0,
+      monthOnePhase: "idle",
+      monthOneInvited: false,
+      monthOnePrompt: false,
+      pendingContinuePrompt: false,
+      monthOneClosing: false,
+      pendingMonthOneClosing: false,
+      dialogue: null,
+      modal: null,
+      choosingSheriden: false,
+      sheridenMemoryDone: false,
+    }),
+  startStoryAtMonthOne: () =>
+    set({
+      storyStartPrompt: false,
+      storyMode: true,
+      scene: "hub",
+      recruited: true,
+      tourStage: "lead-month-one",
+      prologueStep: 0,
+      prologuePhase: "done",
+      monthOneStep: 0,
+      monthOnePhase: "idle",
+      monthOneInvited: true,
+      monthOnePrompt: false,
+      pendingContinuePrompt: false,
+      monthOneClosing: false,
+      pendingMonthOneClosing: false,
+      dialogue: {
+        speaker: "Tom",
+        lines: [
+          { speaker: "Tom", text: "Let's go to Month 1, babe." },
+          { speaker: "Micah", text: "Lead the way, guide." },
+        ],
+        index: 0,
+        after: null,
+        afterMemory: null,
+      },
+      modal: null,
+      choosingSheriden: false,
+      sheridenMemoryDone: false,
+    }),
   startFreeMode: () =>
     set({
       storyModePrompt: false,
+      storyStartPrompt: false,
       storyMode: false,
       recruited: true,
       tourStage: "done",
