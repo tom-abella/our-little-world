@@ -90,7 +90,7 @@ test("flower exchange is reachable in Month 1 and included in the tour", async (
   const stage = STAGES.find((item) => item.id === 1);
   const memory = stage.memories.find((item) => item.id === "mem-1-flowers");
   assert.ok(memory);
-  assert.match(memory.caption, /first time someone had ever given me a flower/i);
+  assert.match(memory.caption, /first time kong makatanggap ng flower/i);
   assert.ok(Math.hypot(memory.x - mapForScene(1).sheridenEntrance.x, memory.y - mapForScene(1).sheridenEntrance.y) < 150, "flowers are near Sheriden Tower");
   assert.ok(canReach(mapForScene(1), memoryTarget(memory, mapForScene(1)), 64));
   assert.match(await readFile(new URL(`../public${memory.imageUrl}`, import.meta.url), "utf8"), /<svg/);

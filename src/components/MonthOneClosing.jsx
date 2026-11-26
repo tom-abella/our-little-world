@@ -67,21 +67,22 @@ export default function MonthOneClosing() {
             Our first month
           </p>
           <h2 className="mt-3 text-2xl font-bold uppercase tracking-[0.12em] text-pink-50 sm:text-4xl">
-            Happy first month, babe
+            Happy first monthsary, babe!
           </h2>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-pink-100/70 sm:text-base">
-            That was our first month together — and I&apos;m so happy we made
-            it here. We still have so many months to look forward to.
+            Ang dami na pala nating memories sa first month pa lang. Thank you
+            sa oras, lambing, at sa pagmamahal mo sakin. Happy ako na naging tayo,
+            at excited akong makagawa pa ng mas marami pang memories kasama ka.
           </p>
 
           <div className="my-6 h-px w-16 bg-pink-300/40" />
 
           <p className="font-serif text-2xl italic text-pink-200 sm:text-3xl">
-            Here&apos;s to the months ahead.
+            I love you, babe. More monthsary pa satin. ♡
           </p>
 
           <p className="mt-5 text-sm leading-relaxed text-pink-100/70">
-            Come back again to view Month 2.
+            Balik ka ulit para sa Month 2, babe.
           </p>
           {monthTwo && (
             <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.22em] text-pink-200/40 sm:text-[10px]">
@@ -95,7 +96,7 @@ export default function MonthOneClosing() {
             onClick={close}
             className="mt-8 rounded-full bg-pink-200 px-10 py-3 font-mono text-xs font-bold uppercase tracking-[0.3em] text-[#2a1630] transition hover:bg-pink-100 hover:shadow-[0_0_30px_rgba(255,170,210,0.45)] focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-100 focus-visible:ring-offset-2 focus-visible:ring-offset-[#150f1f] active:scale-95 sm:text-sm"
           >
-            See you in Month 2
+            Kita tayo sa Month 2
           </button>
         </div>
       </div>

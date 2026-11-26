@@ -121,7 +121,7 @@ export const STAGES = [
         date: "November 2026",
         location: "Our first month",
         caption:
-          "I gave you purple tulips, and you gave me a blue flower too. It was the first time someone had ever given me a flower, and it meant so much to me that it was you. Thank you, babe, for making me feel so loved. I will always remember this little exchange of ours.",
+          "Binigyan kita ng purple tulips, tapos binigyan mo rin ako ng blue flower. First time kong makatanggap ng flower, babe, at ang saya ko na sayo pa nanggaling. Thank you kasi pinaramdam mo na special din ako. Hindi ko makakalimutan itong exchange natin.",
         imageUrl: "/images/month1-flowers.svg",
         x: 1040,
         y: 490,
@@ -132,7 +132,7 @@ export const STAGES = [
         date: "November 2026",
         location: "Baguio, Philippines",
         caption:
-          "Our first travel and vacation together. Cold air, a long bus ride, and the realization that I could spend an entire trip doing nothing but walking around with you.",
+          "First travel at vacation natin together. Ang saya lang na kasama kita sa Baguio—sa mahabang biyahe, malamig na hangin, at mga lakad natin. Kahit saan pa tayo mapunta, basta kasama kita babe, masaya na ako.",
         imageUrl: "/images/month1-photo1.jpg",
         landmark: "sign",
         x: 230,
@@ -144,7 +144,7 @@ export const STAGES = [
         date: "November 2026",
         location: "Somewhere in Pasay",
         caption:
-          "Our first date as a couple. I was nervous in a way I hope I hid well. Somewhere between the hello and the goodbye, I stopped worrying about saying the right thing.",
+          "First date natin as a couple. Hindi na lang kita nililigawan—tayo na talaga. Ang saya lang isipin na yung mga dating lakad natin, may kasunod na bagong memories bilang tayo.",
         imageUrl: "/images/month1-photo2.jpg",
         x: 780,
         y: 290,
@@ -155,7 +155,7 @@ export const STAGES = [
         date: "November 2026",
         location: "A photobooth",
         caption:
-          "Four photos, terrible lighting, perfect company. I still have the strip. I look ridiculous in three of them, and you look proud of that.",
+          "First photobooth natin together. Ang cute lang na may ganito tayong remembrance ng first month natin. Kahit ano pang pose natin, ang saya kong makita na magkatabi tayo sa pictures.",
         imageUrl: "/images/month1-photo3.jpg",
         landmark: "photobooth",
         x: 400,
@@ -167,7 +167,7 @@ export const STAGES = [
         date: "November 2026",
         location: "A café",
         caption:
-          "Your coffee went cold because we kept talking. I remember giving up on finishing mine too, just to keep the conversation going a little longer.",
+          "Dati nagkakape na tayo together, pero ito, official na tayong magkasama. Same na coffee date, pero iba pala sa feeling kapag girlfriend na kita. More kape at kwentuhan pa with you, babe.",
         imageUrl: "/images/month1-photo4.jpg",
         landmark: "cafe",
         x: 600,
@@ -179,7 +179,7 @@ export const STAGES = [
         date: "November 2026",
         location: "Studio iKwaMe",
         caption:
-          "Waiting outside Studio iKwaMe like a nervous driver. The moment you walked out, the whole day got better. We rode home to Sheriden Towers North Tower with the city blurring past.",
+          "First time kitang sunduin sa Studio iKwaMe. Ang saya lang na pagkatapos ng work mo, ako yung makakasama mo pauwi sa Sheriden. Simpleng sundo lang, pero special sakin kasi ikaw yung sinusundo ko.",
         imageUrl: "/images/month1-photo5.jpg",
         x: 1165,
         y: 220,
@@ -190,7 +190,7 @@ export const STAGES = [
         date: "November 2026",
         location: "Everywhere, for a while",
         caption:
-          "Magkasama tayo for almost two weeks — no rush, no schedule. I remember thinking this is what ordinary life could feel like. I wanted more of it.",
+          "Halos two weeks tayong magkasama, babe. Ang saya na mas marami tayong time para makilala pa ang isa’t isa at gumawa ng memories together. Nasanay akong kasama ka, kaya syempre gusto ko pa ng mas marami pang araw na ganito.",
         imageUrl: "/images/month1-photo6.jpg",
         x: 650,
         y: 430,
@@ -200,7 +200,7 @@ export const STAGES = [
         title: "Our FaceTime Calls",
         date: "November 2026",
         location: "FaceTime",
-        caption: "Even when we were apart, seeing your face made the distance feel a little smaller.",
+        caption: "Kapag hindi tayo magkasama, buti na lang may FaceTime. Kahit sa screen lang muna kita makita, masaya na ako. Iba pa rin kapag katabi kita, pero habang hindi pa pwede, dito muna tayo magkukwentuhan, babe.",
         imageUrl: "/images/month1-facetime.jpg",
         landmark: "videocall",
         x: 980,

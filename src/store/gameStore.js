@@ -74,8 +74,8 @@ export const useGame = create((set, get) => ({
       dialogue: {
         speaker: "Tom",
         lines: [
-          { speaker: "Tom", text: "Let's go to Month 1, babe." },
-          { speaker: "Micah", text: "Lead the way, guide." },
+          { speaker: "Tom", text: "Tara sa Month 1, babe. Balikan natin yung first month natin." },
+          { speaker: "Micah", text: "Tara, babe. Lead the way, guide." },
         ],
         index: 0,
         after: null,
@@ -146,11 +146,11 @@ export const useGame = create((set, get) => ({
       dialogue: {
         speaker: "Tom",
         lines: [
-          { speaker: "Tom", text: "That was our beginning, babe." },
-          { speaker: "Micah", text: "I remember all of it." },
+          { speaker: "Tom", text: "Doon nagsimula yung story natin, babe." },
+          { speaker: "Micah", text: "Ang dami nating memories hehe." },
           {
             speaker: "Tom",
-            text: "Now let's go to Month 1. I want to remember our first month with you.",
+            text: "Tara naman sa Month 1. Balikan natin yung first month na tayo na talaga.",
           },
         ],
         index: 0,

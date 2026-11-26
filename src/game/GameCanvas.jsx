@@ -253,61 +253,70 @@ const MONTH_ONE_PATHS = [
 ];
 const MONTH_ONE_TOUR_LINES = {
   "mem-1-1": [
-    { speaker: "Tom", text: "Our first trip. You were so excited about the cold." },
-    { speaker: "Micah", text: "I made you walk everywhere." },
-    { speaker: "Tom", text: "I'd do it again, babe." },
+    { speaker: "Tom", text: "First Baguio trip natin together, babe." },
+    { speaker: "Micah", text: "Ang dami nating nilakad hahaha." },
+    { speaker: "Tom", text: "Kahit mapagod, basta ikaw kasama ko. Pero pahinga rin tayo minsan hahaha." },
   ],
   "mem-1-3": [
-    { speaker: "Tom", text: "Our first photobooth strip. You still have it?" },
-    { speaker: "Micah", text: "Of course. You look ridiculous." },
-    { speaker: "Tom", text: "Worth it." },
+    { speaker: "Tom", text: "Ito naman yung first photobooth natin, babe." },
+    { speaker: "Micah", text: "Ang cute natin dito hehe." },
+    { speaker: "Tom", text: "Ikaw talaga yung cute. Nakisama lang ako hahaha." },
   ],
   "mem-1-4": [
-    { speaker: "Tom", text: "Our first coffee date as a couple." },
-    { speaker: "Micah", text: "Your coffee went cold." },
-    { speaker: "Tom", text: "Because I was busy falling for you." },
+    { speaker: "Tom", text: "Marami na tayong coffee dates, pero ito, couple na tayo." },
+    { speaker: "Micah", text: "May label na pati kasama mong magkape hahaha." },
+    { speaker: "Tom", text: "At ikaw na palagi kong gustong kasama, babe." },
   ],
   "mem-1-2": [
-    { speaker: "Tom", text: "Our first date as a couple." },
-    { speaker: "Micah", text: "I was so nervous." },
-    { speaker: "Tom", text: "You hid it well. I didn't." },
+    { speaker: "Tom", text: "Balikan naman natin yung first date natin na tayo na talaga." },
+    { speaker: "Micah", text: "Official na, babe hehe." },
+    { speaker: "Tom", text: "Dati wish ko lang ito. Ngayon girlfriend na kita." },
   ],
   "mem-1-facetime": [
-    { speaker: "Tom", text: "And our FaceTime calls." },
-    { speaker: "Micah", text: "Even when we were far apart." },
-    { speaker: "Tom", text: "You always made the distance smaller." },
+    { speaker: "Tom", text: "Syempre kasama dito yung FaceTime calls natin." },
+    { speaker: "Micah", text: "Para kahit malayo, kita pa rin kita." },
+    { speaker: "Tom", text: "Oo babe. Pero mas gusto pa rin kitang katabi hehe." },
   ],
   "mem-1-5": [
-    { speaker: "Tom", text: "The first time I picked you up from work." },
-    { speaker: "Micah", text: "You were waiting outside Studio iKwaMe." },
-    { speaker: "Tom", text: "I'd wait for you every day." },
+    { speaker: "Tom", text: "Ito naman yung first sundo ko sayo sa Studio iKwaMe." },
+    { speaker: "Micah", text: "Thank you sa pagsundo, babe." },
+    { speaker: "Tom", text: "Happy ako na ako yung kasama mong umuwi. Tara?" },
+  ],
+  "mem-1-flowers": [
+    { speaker: "Tom", text: "Purple tulips para sayo, tapos may blue flower din ako galing sayo." },
+    { speaker: "Micah", text: "Syempre babe, may flowers ka rin." },
+    { speaker: "Tom", text: "First time ko yun. Thank you, babe. Sobrang na-appreciate ko." },
   ],
   "mem-1-6": [
-    { speaker: "Tom", text: "Almost two weeks together. No rush." },
-    { speaker: "Micah", text: "It felt like home." },
-    { speaker: "Tom", text: "That's what I want to remember." },
+    { speaker: "Tom", text: "Halos two weeks din tayong magkasama, babe." },
+    { speaker: "Micah", text: "Ang bilis lang ng araw." },
+    { speaker: "Tom", text: "Oo nga. Bitin pa rin ako hahaha. More days together pa, babe." },
   ],
 };
 const SHERIDEN_ROOM_LINES = {
   "sheriden-lobby": [
-    { speaker: "Tom", text: "Our lobby memory. This little corner." },
-    { speaker: "Micah", text: "We talked here for hours." },
-    { speaker: "Tom", text: "I'd stay longer if I could." },
+    { speaker: "Tom", text: "Dito mo ako sinagot, babe. Dito naging tayo." },
+    { speaker: "Micah", text: "Ang dami na ring nangyari sa spot na ’to hahaha." },
+    { speaker: "Tom", text: "From away to deep talks. Ang dami nating napag-usapan dito." },
+    { speaker: "Micah", text: "Pero special pa rin itong lugar." },
+    { speaker: "Tom", text: "Oo naman. Dito naging girlfriend ko yung gusto ko lang dati hehe." },
   ],
   "sheriden-roof": [
-    { speaker: "Tom", text: "The roof deck. The city looked so small from up here." },
-    { speaker: "Micah", text: "You held my hand the whole time." },
-    { speaker: "Tom", text: "I'd hold it again." },
+    { speaker: "Tom", text: "Dito rin tayo nagplano ng mga pupuntahan natin, babe." },
+    { speaker: "Micah", text: "Pati yung mga first time nating gagawin together." },
+    { speaker: "Tom", text: "Ang saya lang na may mga plano na akong kasama ka." },
+    { speaker: "Micah", text: "Isa-isahin natin yan, babe hehe." },
+    { speaker: "Tom", text: "Oo babe. Marami pa tayong first times na pagsasamahan." },
   ],
 };
 const SHERIDEN_ENTRY_LINES = {
   "sheriden-lobby": [
-    { speaker: "Tom", text: "Let's start with the lobby, babe." },
-    { speaker: "Micah", text: "Okay. Lead the way." },
+    { speaker: "Tom", text: "Balikan naman natin yung lobby, babe." },
+    { speaker: "Micah", text: "Sige babe. Lead the way." },
   ],
   "sheriden-roof": [
-    { speaker: "Tom", text: "Now the roof deck. I want to show you our view again." },
-    { speaker: "Micah", text: "I'd love that." },
+    { speaker: "Tom", text: "Tara naman sa roof deck, babe. Balikan natin yung view." },
+    { speaker: "Micah", text: "Tara, babe." },
   ],
 };
 
