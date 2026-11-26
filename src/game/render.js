@@ -379,6 +379,20 @@ function drawPortals(ctx, map) {
     );
     if (!unlocked) drawLock(ctx, p.x, p.y + 6);
   }
+
+  // A departure-board style note leaves room for the story beyond the gates.
+  const x = map.width - 128;
+  ctx.save();
+  ctx.fillStyle = "rgba(47, 38, 57, 0.95)";
+  roundRect(ctx, x - 88, 74, 176, 66, 8);
+  ctx.fill();
+  ctx.strokeStyle = "#d5a3b8";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  label(ctx, "MORE MONTHS", x, 94, "#ffe6ef", 12);
+  label(ctx, "TO COME  ♥", x, 112, "#f4b8cf", 12);
+  label(ctx, "More memories await", x, 128, "#d8c9d6", 9);
+  ctx.restore();
 }
 
 function drawExit(ctx, map) {
